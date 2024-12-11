@@ -29,7 +29,7 @@ function Contacts({setTabs}) {
         className='w-full bg-slate-200 p-1 pl-16 rounded-md'
         />
       </div>
-      <div className='flex items-center gap-5 my-4'>
+      <div className='flex items-center gap-5 my-4 cursor-pointer'onClick={()=>setTabs('newcontacts')}>
         <span className=' h-12 w-12 bg-green-500 rounded-full flex justify-center items-center text-2xl text-white'>
             <FaUser/>
         </span>

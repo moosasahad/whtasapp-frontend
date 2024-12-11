@@ -15,7 +15,7 @@ function Sidebar({setTabs}) {
         <button className="w-10 h-10 flex justify-center items-center rounded-full relative focus:bg-gray-300 group"
         onClick={()=>setTabs("Chat")}
         >
-          <MdOutlineMessage className="text-2xl" />
+          <MdOutlineMessage className="text-2xl text-gray-700" />
           <span className="absolute text-sm font-extralight pt-1 pb-1 bg-slate-800 text-white left-12 rounded-xl pl-4 pr-4 text-center opacity-0 group-hover:opacity-100 transition duration-300 ease-linear pointer-events-none">
             chat
           </span>
@@ -33,7 +33,7 @@ function Sidebar({setTabs}) {
         onClick={()=>setTabs("Channels")}
         
         >
-          <LuMessageCircleMore className="text-2xl" />
+          <LuMessageCircleMore className="text-2xl text-gray-700" />
           <span className="absolute text-sm font-extralight pt-1 pb-1 bg-slate-800 text-white left-12 rounded-xl pl-4 pr-4 text-center opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out pointer-events-none">
             Channels
           </span>
@@ -41,7 +41,7 @@ function Sidebar({setTabs}) {
         <button className="w-10 h-10 flex justify-center items-center rounded-full relative focus:bg-gray-300 group"
         onClick={()=>setTabs("Communities")}
         >
-          <HiOutlineUserGroup className="text-2xl" />
+          <HiOutlineUserGroup className="text-2xl  text-gray-700" />
           <span className="absolute text-sm font-extralight pt-1 pb-1 bg-slate-800 text-white left-12 rounded-xl pl-4 pr-4 text-center opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out pointer-events-none">
             Communities
           </span>
@@ -57,16 +57,27 @@ function Sidebar({setTabs}) {
       </div>
 
       {/* Bottom Section */}
+      
       <div className="flex flex-col items-center gap-4">
-        <button className="">
-          <IoSettingsOutline className="text-2xl" />
+      <button className="w-10 h-10 flex justify-center items-center rounded-full relative focus:bg-gray-300 group"
+        onClick={()=>setTabs("settings")}
+        >
+           <IoSettingsOutline className="text-2xl text-gray-700" />
+          <span className="absolute text-sm font-extralight pt-1 pb-1 bg-slate-800 text-white left-12 rounded-xl pl-4 pr-4 text-center opacity-0 group-hover:opacity-100 transition duration-300 ease-linear pointer-events-none">
+            Settings
+          </span>
         </button>
-        <button className="w-8 h-8 rounded-full overflow-hidden">
+        <button className="w-10 h-10 flex justify-center items-center rounded-full relative focus:bg-gray-300 group"
+        onClick={()=>setTabs("profile")}
+        >
           <img
             src={profileimage}
             alt="profile image"
             className="w-full h-full object-cover"
           />
+          <span className="absolute text-sm font-extralight pt-1 pb-1 bg-slate-800 text-white left-12 rounded-xl pl-4 pr-4 text-center opacity-0 group-hover:opacity-100 transition duration-300 ease-linear pointer-events-none">
+            Profile
+          </span>
         </button>
       </div>
     </div>

@@ -32,15 +32,17 @@ function Communitie({ setTabs }) {
             className="flex w-fit hover:underline cursor-pointer text-emerald-600 text-sm items-center"
             onClick={() => setTabs("Communities")}
           >
-            Log in with phone number
+            See example communities
             <span className="flex items-center justify-center ml-1 mr-1 text-2xl">
               <MdOutlineKeyboardArrowRight />
             </span>
           </p>
         </div>
         </div>
-        <div className="flex justify-center mt-14">
-        <button className="w-12 h-12 bg-green-500 flex justify-center items-center rounded-full">
+        <div className="flex justify-center mt-12">
+        <button className="w-12 h-12 bg-green-500 flex justify-center items-center rounded-full"
+        onClick={()=>setTabs((priv)=>priv)}
+        >
         <FiArrowRight className="text-2xl text-gray-600 " />
         </button>
         </div>

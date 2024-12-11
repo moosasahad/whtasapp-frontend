@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { BiMessageAdd } from "react-icons/bi";
 import { HiDotsVertical } from "react-icons/hi";
+import { MdOutlineSearch } from 'react-icons/md';
 
 function Chats({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
@@ -30,10 +31,30 @@ function Chats({setTabs}) {
         </span>
           ):(null)}
         </button>
-       {/* {dorpdown ? ( */}
-        
-       {/* ):(null)} */}
        </div>
+       
+      </div>
+      <div>
+        <button className='text-gray-600 text-2xl relative top-9 left-3 '>
+            {/* <IoMdSearch/> */}
+            <MdOutlineSearch className='text-xl'/>
+        </button>
+        <input 
+        type="text" 
+        placeholder='Search'
+        className='w-full bg-slate-200 p-1 pl-14 rounded-md'
+        />
+      </div>
+      <div className='flex gap-5 overflow-hidden mt-2'>
+        <span className='pl-2 pr-2 p-1 bg-slate-200 rounded-xl text-gray-500'>
+            All
+        </span>
+        <span className='pl-2 pr-2 p-1 bg-slate-200 rounded-xl text-gray-500'>
+            Unread
+        </span>
+        <span className='pl-2 pr-2 p-1 bg-slate-200 rounded-xl text-gray-500'>Favourites</span>
+        <span className='pl-2 pr-2 p-1 bg-slate-200 rounded-xl text-gray-500'>Groups</span>
+
       </div>
     </div>
   )
