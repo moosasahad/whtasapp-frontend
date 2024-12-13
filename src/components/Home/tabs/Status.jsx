@@ -1,13 +1,15 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { AiOutlinePlus } from "react-icons/ai";
 import { HiDotsVertical } from 'react-icons/hi'
 import profile from '../../../Images/profile image.png'
 import { HiMiniPlusSmall } from "react-icons/hi2";
+import { Product } from '../../Component/Productcontext';
 
 function Status({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
 
     const fileInputRef = useRef(null);
+    const {owner} = useContext(Product)
 
   const handleFileUploadClick = () => {
     fileInputRef.current.click(); // Trigger the hidden file input
@@ -24,9 +26,9 @@ function Status({setTabs}) {
           <AiOutlinePlus/>
           {/* {dorpdown ? ( */}
             <>
-            <span className='bg-white absolute top-16 left-32 p-2 text-left w-60 shadow-md shadow-slate-400 cursor-pointer opacity-0 group-focus:opacity-100'>
+            <span className='bg-white absolute top-16 left-32 p-2 text-left w-60 shadow-md shadow-slate-400 cursor-pointer opacity-0 group-focus:opacity-100 pointer-events-none'>
         <h1
-          className='p-2 text-base text-slate-600 hover:bg-gray-100'
+          className='p-2 text-base text-slate-600 hover:bg-gray-100 pointer-events-auto'
           onClick={handleFileUploadClick}
         >
           Photos & Videos
@@ -60,12 +62,26 @@ function Status({setTabs}) {
       </div>
 
      <div className='flex items-center'>
-     <div className='mr-2'>
-        <img src={profile} alt=""  className='w-14 h-14 rounded-full'/>
-        <p className=' bg-green-500 relative -top-6 left-8 rounded-full w-5 h-5 border text-3xl text-white border-white flex justify-center items-center'>
-        <HiMiniPlusSmall />
-        </p>
-      </div>
+     <div className="mr-2 cursor-pointer">
+  <label className='cursor-pointer'>
+    <img
+      src={owner ? owner.profilePhoto : profile}
+      alt=""
+      className="w-14 h-14 rounded-full"
+    />
+    <input
+      type="file"
+      className="hidden"
+      onChange={(e) => {
+        const file = e.target.files[0];
+        console.log("Selected file:", file);
+      }}
+    />
+  </label>
+  <p className="bg-green-500 relative -top-6 left-8 rounded-full w-5 h-5 border text-3xl text-white border-white flex justify-center items-center">
+    <HiMiniPlusSmall />
+  </p>
+</div>
       <div>
         <h3 className='text-gray-500'>My status</h3>
         <p className='text-gray-500 text-sm'>Clik to add status update</p>

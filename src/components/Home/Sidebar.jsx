@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { MdOutlineMessage } from "react-icons/md";
 import Statusicon from "../../Images/status-2.svg";
 import { LuMessageCircleMore } from "react-icons/lu";
@@ -6,8 +6,10 @@ import { HiOutlineUserGroup } from "react-icons/hi2";
 import metai from "../../Images/metai.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import profileimage from "../../Images/profile image.png";
+import { Product } from "../Component/Productcontext";
 
 function Sidebar({setTabs}) {
+  const {owner} = useContext(Product)
   return (
     <div className="w-16 h-screen flex flex-col justify-between items-center py-4 bg-slate-100">
       {/* Top Section */}
@@ -71,7 +73,7 @@ function Sidebar({setTabs}) {
         onClick={()=>setTabs("profile")}
         >
           <img
-            src={profileimage}
+            src={owner?owner.profilePhoto:profileimage}
             alt="profile image"
             className="w-full h-full object-cover"
           />

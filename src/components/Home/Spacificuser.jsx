@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaVideo } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
@@ -16,14 +16,23 @@ import { RiUser3Fill } from "react-icons/ri";
 import { BiPoll } from "react-icons/bi";
 import { PiStickerDuotone } from "react-icons/pi";
 import { GrFormClose } from "react-icons/gr";
+import { Product } from "../Component/Productcontext";
 
 
-function Spacificuser() {
+function Spacificuser({userid}) {
   const [focus, setFocus] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [pop, setpop] = useState(false);
+  const {state}= useContext(Product)
+  const [usermeesage,setUsermessage]=useState([])
 
-  console.log("sdsadsa", focus);
+  const usermessages = state.find((item)=>item.id==userid)
+  useEffect(()=>{
+    setUsermessage(usermessages)
+  },[userid])
+  console.log("userid in specific user",usermeesage)
+
+  console.log("sdsadsa", state);
   return (
     <div
       style={{ backgroundImage: `url(${background})` }}
@@ -31,11 +40,13 @@ function Spacificuser() {
       
     >
       <div className="bg-slate-200 h-16 flex items-center justify-between cursor-pointer">
-        <div className="w-14 h-14 flex items-center ml-3">
-          <img src={profileimage} alt="profile image" />
+        <div className="flex items-center   ml-3">
+          <div className="w-14 h-14 rounded-full overflow-hidden">
+          <img src={usermeesage.profilePhoto?usermeesage.profilePhoto:profileimage} alt="profile image" />
+          </div>
           <div className="ml-2">
-            <h1>Name</h1>
-            <p className="text-gray-500 text-xs">12345678903</p>
+            <h1>{usermeesage.name}</h1>
+            <p className="text-gray-500 text-xs">{usermeesage.number}</p>
           </div>
         </div>
 
@@ -184,6 +195,12 @@ function Spacificuser() {
           />
           <IoMdMic className="text-2xl text-gray-500 cursor-pointer" />
         </div>
+      </div>
+      {/* ------dispaly iser messages ------- */}
+
+      
+      <div>
+        {usermeesage.body}
       </div>
     </div>
   );

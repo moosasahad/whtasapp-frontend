@@ -1,36 +1,42 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import profileimage from "../../../Images/profile image.png"
 import { FaPen } from "react-icons/fa";
 import { FiCheck } from 'react-icons/fi';
 import { IoCamera } from "react-icons/io5";
+import { Product } from '../../Component/Productcontext';
 
 
 
 function Profile() {
     const [edit,setEdit]=useState(true)
     const [abouedit,setaboutEdit]=useState(true)
+    const {owner} =useContext(Product)
+    console.log("sdfghjk profile",owner);
+    
 
-    const[inpu,setInput]=useState('Hey there! I am using WhatsApp.')
+    const[inpu,setInput]=useState(owner.name)
   return (
     <div>
         <div className="relative">
   <h1 className="text-2xl font-bold mb-4">Profile</h1>
-  <div className="w-64 h-64 flex justify-center items-center relative">
-  {/* Profile Image */}
-  <img
-    className="w-64 h-64 rounded-full object-cover"
-    src={profileimage}
-    alt="Profile"
-  />
+  <div className="w-64 h-64 flex justify-center items-center relative mx-auto">
+ 
+  <div className="w-64 h-64 rounded-full overflow-hidden">
+    <img
+      className="w-full h-full object-cover"
+      src={owner ? owner.profilePhoto : profileimage}
+      alt="Profile"
+    />
+  </div>
 
-  {/* Overlay */}
-  <label className="absolute w-48 h-48 rounded-full bg-slate-400 bg-opacity-50 flex flex-col justify-center items-center text-white text-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+  
+  <label className="absolute top-0 left-0 w-64 h-64 rounded-full bg-slate-400 bg-opacity-50 flex flex-col justify-center items-center text-white text-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
     {/* Camera Icon and Text */}
     <div className="flex flex-col items-center">
       <IoCamera className="text-3xl m-2" />
       <h6 className="text-xs">CHANGE<br />PROFILE PHOTO</h6>
     </div>
-    {/* Hidden File Input */}
+  
     <input
       type="file"
       className="hidden"
@@ -77,7 +83,7 @@ function Profile() {
         {abouedit?(
             
                 <div className='flex justify-between py-6'>
-                <h1>{inpu}</h1>
+                <h1>{owner.title}</h1>
                 <span className='cursor-pointer w-5 h-5' onClick={()=>setaboutEdit(!edit)}>
                     <FaPen className='text-gray-500'/>
                 </span>

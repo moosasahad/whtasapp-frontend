@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { MdOutlineSearch } from 'react-icons/md'
 // import profile from '../../../Images/'
 import profileimage from "../../../Images/profile image.png"
@@ -10,11 +10,13 @@ import { MdBrightnessAuto } from "react-icons/md";
 import { BiSolidHelpCircle } from "react-icons/bi";
 import { IoIosLogOut } from "react-icons/io";
 import { TbLogout } from "react-icons/tb";
+import { Product } from '../../Component/Productcontext';
 
 
 
 
 function Settings({setTabs}) {
+    const {owner} = useContext(Product)
   return (
     <div>
        <h1 className='text-2xl font-bold'>Settings</h1>
@@ -30,12 +32,16 @@ function Settings({setTabs}) {
         />
       </div>
       <div className='flex items-center cursor-pointer' onClick={()=>setTabs('profile')}>
-        <div className='w-28 h-28'>
-            <img src={profileimage} alt="" />
-        </div>
+      <div className="w-24 h-24 rounded-full overflow-hidden m-3">
+    <img
+      className="w-full h-full object-cover"
+      src={owner ? owner.profilePhoto : profileimage}
+      alt="Profile"
+    />
+  </div>
         <div>
-            <h1>User Full Name</h1>
-            <p className='text-sm text-gray-500'>Hey there! i am using WhatsApp.</p>
+            <h1>{owner.name}</h1>
+            <p className='text-sm text-gray-500'>{owner.title}</p>
         </div>
       </div>
 
