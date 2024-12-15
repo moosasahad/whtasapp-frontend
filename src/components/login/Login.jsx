@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import whatsapplogo from "../../Images/whatsapp logo.jpg";
 import whtsappqrcode from "../../Images/whtsapp qrcode.png";
 import profileimage from "../../Images/profile image.png";
@@ -14,10 +14,11 @@ import { useFormik } from "formik";
 import { loginvalid } from "../Form_validation/loginFormSchema";
 import Otpfeald from "./Otpfeald";
 import Home from "../Home/Home";
+import { Product } from "../Component/Productcontext";
 
 function Login() {
   const [state, setState] = useState("page-1");
-  const [status, setStatus] = useState(true);
+  const [status, setStatus] = useState(false);
   // const navigate = useNavigate()
 
   const countries = [
@@ -34,7 +35,7 @@ function Login() {
     setCountryCode(countryCode);
     setPhoneNumber("");
   };
-
+  const { login,setlogin,tabs,settabs} = useContext(Product)
   const { values, errors, handleBlur, handleChange, handleSubmit, touched } =
     useFormik({
       initialValues: {
@@ -48,11 +49,22 @@ function Login() {
     });
   console.log("errors", errors.phonenumber);
   const loginstatus = () => {
-    setStatus(false);
+    setlogin(false);
+    const storage = localStorage.setItem("user",false)
+    console.log("storage",storage)
   };
+
+  
+  // setlogin(getstiorege)
+
+useEffect(()=>{
+  const item = localStorage.getItem("user")
+  item && setlogin(item)
+},[])
+
   return (
     <>
-      {!status ? (
+      {login ? (
         <div className="m-4">
           <div>
             <div className="flex justify-between">
@@ -69,12 +81,12 @@ function Login() {
             <div className="flex items-center justify-center">
               <div
                 className={
-                  state == "page-1"
+                  tabs == "page-1"
                     ? "w-auto border border-black rounded-3xl h-auto p-12 flex flex-wrap items-center"
                     : "w-96 border border-black rounded-3xl xl:w-3/4 md:w-3/4 flex flex-wrap h-auto justify-center items-center p-10"
                 }
               >
-                {state == "page-1" && (
+                {tabs == "page-1" && (
                   <>
                     <div className="max-w-xl">
                       <h1 className="text-3xl mb-2">Log into WhatsApp Web</h1>
@@ -111,7 +123,7 @@ function Login() {
                       </p>
                       <p
                         className="text-lg flex underline w-fit decoration-green-500 underline-offset-4 decoration-2 hover:text-green-500 cursor-pointer"
-                        onClick={() => setState("page-2")}
+                        onClick={() => settabs("page-2")}
                       >
                         Log in with phone number{" "}
                         <span className="flex items-center justify-center ml-1 mr-1">
@@ -142,7 +154,7 @@ function Login() {
                     </div>
                   </>
                 )}
-                {state == "page-2" && (
+                {tabs == "page-2" && (
                   <div className="felx justify-center items-center ">
                     <h1 className="text-4xl text-center mb-3">
                       Enter phone number
@@ -189,7 +201,7 @@ function Login() {
                         <div className="flex justify-center mt-14">
                           <button
                             className="p-2 bg-green-800 text-white rounded-full w-20"
-                            onClick={() => setState("page-3")}
+                            onClick={() => settabs("page-3")}
                           >
                             Next
                           </button>
@@ -197,7 +209,7 @@ function Login() {
                       </form>
                       <p
                         className="text-lg flex underline w-fit decoration-green-500 underline-offset-4 decoration-2 hover:text-green-500 cursor-pointer"
-                        onClick={() => setState("page-1")}
+                        onClick={() => settabs("page-1")}
                       >
                         Log in with QR code{" "}
                         <span className="flex items-center justify-center ml-1 mr-1">
@@ -207,7 +219,7 @@ function Login() {
                     </div>
                   </div>
                 )}
-                {state == "page-3" && (
+                {tabs == "page-3" && (
                   <div className="w-full h-full justify-end">
                     <div>
                       <h1 className="text-3xl mb-2">Enter code on phone</h1>
@@ -222,7 +234,7 @@ function Login() {
                         </p>
                         <span
                           className="cursor-pointer"
-                          onClick={() => setState("page-2")}
+                          onClick={() => settabs("page-2")}
                         >
                           (
                           <span className="text-gray-500 font-normal">
@@ -232,7 +244,7 @@ function Login() {
                         </span>
                       </div>
                       <div className="w-full h-full flex justify-center ">
-                        <Otpfeald setState={setState} />
+                        <Otpfeald settabs={settabs} />
                       </div>
 
                       <div className="max-w-xl">
@@ -265,7 +277,7 @@ function Login() {
                         </p>
                         <p
                           className="text-lg flex underline w-fit decoration-green-500 underline-offset-4 decoration-2 hover:text-green-500 cursor-pointer"
-                          onClick={() => setState("page-1")}
+                          onClick={() => settabs("page-1")}
                         >
                           Log in with QR code
                           <span className="flex items-center justify-center ml-1 mr-1">
@@ -276,7 +288,7 @@ function Login() {
                     </div>
                   </div>
                 )}
-                {state == "page-4" && (
+                {tabs == "page-4" && (
                   <div className="w-full h-full flex justify-center items-center mb-32">
                     <div className="flex flex-col items-center text-center">
                       <div className="w-32 h-32 overflow-hidden rounded-full flex justify-center items-center relative">

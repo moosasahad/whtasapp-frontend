@@ -10,7 +10,7 @@ import * as Yup from "yup";
 //     .required("OTP is required"),
 // });
 
-function Otpfeald({setState}) {
+function Otpfeald({settabs}) {
     // console.log(value)
   const inputs = useRef([]);
 
@@ -74,7 +74,7 @@ function Otpfeald({setState}) {
             <button
               type="submit"
               className="w-20 h-8 bg-green-500 rounded-lg"
-              onClick={()=>setState("page-4")}
+              onClick={()=>settabs("page-4")}
             >
               Submit
             </button>

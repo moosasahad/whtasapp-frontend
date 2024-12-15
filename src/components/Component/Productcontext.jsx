@@ -5,6 +5,8 @@ function Productcontext({children}) {
     const[state,setState]=useState(null)
     const[userid,setusesrid]=useState('')
     console.log("userid---",userid);
+    const [login,setlogin]=useState(true)
+    const [tabs,settabs]=useState('page-1')
     const [owner,setOwner]=useState({
         id: 1,
                   name: "Moosa sahad pk",
@@ -107,6 +109,10 @@ function Productcontext({children}) {
         setusesrid,
         userid,
         owner,
+        login,
+        setlogin,
+        tabs,
+        settabs,
     };
   return (
     <Product.Provider value={obj}>
