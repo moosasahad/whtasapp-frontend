@@ -9,16 +9,21 @@ import profile from '../../../Images/profile image.png'
 function Chats({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
     const {state,setusesrid,setlogin,login,settabs} = useContext(Product)
-    console.log("asdfghjklchhat  chat ",state);
-    console.log("dfghjk login state",login);
+    // console.log("asdfghjklchhat  chat ",state);
+    // console.log("dfghjk login state",login);
     
     
     const [value,setValu]=useState([])
     useEffect(()=>{
         setValu(state)
     },[state])
-    console.log("product",state);
-    
+    // console.log("product",state);
+    const logutfunction = ()=>{
+      setlogin(true)
+      settabs('page-1')
+      localStorage.removeItem("user")
+    }
+
    
   return (
     <div>
@@ -40,7 +45,7 @@ function Chats({setTabs}) {
             <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100' onClick={()=>setTabs("newgroup")}>New group</h1>
             <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100' onClick={()=>setTabs("starede")}>Starred messages</h1>
             <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100'>Select chats</h1>
-            <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100' onClick={()=>{setlogin(true),settabs('page-1')}}>Log out</h1>
+            <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100' onClick={logutfunction}>Log out</h1>
             <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100'>Get Whatsapp for Windows</h1>
         </span>
           ):(null)}

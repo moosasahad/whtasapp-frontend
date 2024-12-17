@@ -24,16 +24,9 @@ function Home() {
   const {userid} = useContext(Product)
   // const value = useContext(Product)
   // const [contact,Setcontact]=useState('')
-  console.log("tabs",tabs)
-  console.log("window.innerWidth",window.innerWidth);
-  const [width,setWidth]=useState(null)
-
-  useEffect(()=>{
-  const a =window.innerWidth;
-  setWidth(a)
-  console.log("sdfghjk",width);
+  // console.log("tabs",tabs)
+ 
   
-  },[width])
   return (
     <div className='bg-slate-100 flex'>
         {tabs === 'channelbaner' && (

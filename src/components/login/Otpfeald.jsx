@@ -1,17 +1,9 @@
-
-
 import React, { useRef } from "react";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+import { Formik, Field, Form } from "formik";
+import axios from 'axios';
+import { axiosPrivate } from "../../Axiosinstens"; 
 
-// const otpSchema = Yup.object().shape({
-//   otp: Yup.array()
-//     .of(Yup.string().matches(/^\d$/, "Must be a digit").required("Required"))
-//     .required("OTP is required"),
-// });
-
-function Otpfeald({settabs}) {
-    // console.log(value)
+function OtpField(props) {
   const inputs = useRef([]);
 
   const handleFocus = (event, index) => {
@@ -24,7 +16,7 @@ function Otpfeald({settabs}) {
   const handleBackspace = (event, index, setFieldValue) => {
     if (event.key === "Backspace" && !event.target.value && index > 0) {
       inputs.current[index - 1].focus();
-      setFieldValue(`otp[${index}]`, ""); // Clear the current field
+      setFieldValue(`otp[${index}]`, ""); d
     }
   };
 
@@ -40,21 +32,31 @@ function Otpfeald({settabs}) {
       inputs.current[pasteData.length - 1]?.focus();
     }
   };
+
   return (
     <Formik
       initialValues={{ otp: ["", "", "", ""] }}
-      onSubmit={(values) => {
-        alert(`Entered OTP: ${values.otp.join("")}`);
+      onSubmit={async (values, { setSubmitting }) => {
+        const enteredOTP = values.otp.join("");
+        console.log("Entered OTP:", enteredOTP, props.number);
+        try {
+          const res = await axiosPrivate.post("/send-otp", { otp: enteredOTP, userNumber: props.number });
+          console.log("OTP submitted successfully:", res.data);
+          props.settabs("page-4")
+        } catch (error) {
+          console.error("Error submitting OTP:", error);
+          
+        }
+
+        setSubmitting(false); 
       }}
     >
-      {({ values, errors, touched, setFieldValue }) => (
-        <form className="w-full h-full flex justify-center m-10">
+      {({ values, setFieldValue, isSubmitting }) => (
+        <Form className="w-full h-full flex justify-center m-10">
           <div className="flex flex-wrap gap-4 justify-center items-center">
             {values.otp.map((_, index) => (
-              <Field
-                key={index}
-                name={`otp[${index}]`}
-                render={({ field }) => (
+              <Field key={index} name={`otp[${index}]`}>
+                {({ field }) => (
                   <input
                     {...field}
                     ref={(el) => (inputs.current[index] = el)}
@@ -69,21 +71,20 @@ function Otpfeald({settabs}) {
                     onPaste={(e) => handlePaste(e, setFieldValue)}
                   />
                 )}
-              />
+              </Field>
             ))}
-            <button
-              type="submit"
-              className="w-20 h-8 bg-green-500 rounded-lg"
-              onClick={()=>settabs("page-4")}
-            >
-              Submit
-            </button>
           </div>
-          
-        </form>
+          <button
+            type="submit"
+            className="w-20 h-8 bg-green-500 rounded-lg"
+            disabled={isSubmitting} 
+          >
+            Submit
+          </button>
+        </Form>
       )}
     </Formik>
   );
 }
 
-export default Otpfeald;
+export default OtpField;

@@ -73,7 +73,7 @@ function Sidebar({setTabs}) {
         onClick={()=>setTabs("profile")}
         >
           <img
-            src={owner?owner.profilePhoto:profileimage}
+            src={owner?owner.profileimage:profileimage}
             alt="profile image"
             className="w-full h-full object-cover"
           />

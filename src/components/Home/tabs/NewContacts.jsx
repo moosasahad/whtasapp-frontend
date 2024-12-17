@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaUser } from 'react-icons/fa6'
 import { FiArrowLeft } from 'react-icons/fi'
 import { FaPhone } from "react-icons/fa6";
 import { useFormik } from 'formik';
 import { contactsave } from '../../Form_validation/contactsaveSchema';
+import { axiosPrivate } from '../../../Axiosinstens';
 
 
 function NewContacts({setTabs}) {
+  const [respons,setresponese] = useState('')
     const { values, errors, handleBlur, handleChange, handleSubmit, touched } =
     useFormik({
       initialValues: {
@@ -14,9 +16,16 @@ function NewContacts({setTabs}) {
         name:'',
       },
       validationSchema:contactsave,
-      onSubmit: (value, e) => {
-        // e.target.preventDefault();
-        console.log("value", value);
+      onSubmit: async (value) => {
+        const {name,phonenumber} = value;
+        try {
+                  const res = await axiosPrivate.post("/savecontact",{name,number:phonenumber});
+                  console.log("res post contact", res.data.response);
+                } catch (error) {
+                  setresponese(error?.response.data.message)
+
+                  console.log("Error in contact post", error.response.data.message);
+                }
       },
     });
   return (
@@ -78,6 +87,7 @@ function NewContacts({setTabs}) {
         <span className='text-red-500'>
                     {errors.phonenumber&& touched.phonenumber?(errors.phonenumber):(null)}
                 </span>
+                <span className='text-red-500'>{respons}</span>
         <div className='flex justify-center items-center'>
         <button type='submit' className='text-white bg-green-500 p-2 w-20  rounded-3xl'>Save</button>
         </div>

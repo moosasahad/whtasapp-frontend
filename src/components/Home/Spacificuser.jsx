@@ -17,6 +17,9 @@ import { BiPoll } from "react-icons/bi";
 import { PiStickerDuotone } from "react-icons/pi";
 import { GrFormClose } from "react-icons/gr";
 import { Product } from "../Component/Productcontext";
+import { axiosPrivate } from "../../Axiosinstens";
+import { LuSendHorizontal } from "react-icons/lu";
+
 
 
 function Spacificuser({userid}) {
@@ -24,15 +27,35 @@ function Spacificuser({userid}) {
   const [sidebar, setSidebar] = useState(false);
   const [pop, setpop] = useState(false);
   const {state}= useContext(Product)
+  const [userids,setuserid]=useState(null)
   const [usermeesage,setUsermessage]=useState([])
-
-  const usermessages = state.find((item)=>item.id==userid)
+  const [focusing,setFocusing]=useState('')
+  console.log("dsjfgsjdfg focusing",focusing);
+  
   useEffect(()=>{
-    setUsermessage(usermessages)
+    setuserid(userid)
+    console.log("dfjsdhfksd",userids);
   },[userid])
-  console.log("userid in specific user",usermeesage)
+  console.log("userid props",userids);
 
-  console.log("sdsadsa", state);
+useEffect(()=>{
+  const contact = async ()=>{
+    try {
+      const res = await axiosPrivate.get("/getallcontatc");
+      console.log("res get contact", res.data.data.contacts);
+      const respon = res.data.data;
+      const findemesagger = res.data.data.contacts.find((value) =>value._id==userids)
+      setUsermessage(findemesagger)
+      console.log("finde messager = ",findemesagger);
+      
+    } catch (error) {
+      console.log("Error in contact post", error);
+    }
+  }
+  contact()
+},[userids])
+console.log("jgagshsgda usermeesage",usermeesage);
+
   return (
     <div
       style={{ backgroundImage: `url(${background})` }}
@@ -42,11 +65,11 @@ function Spacificuser({userid}) {
       <div className="bg-slate-200 h-16 flex items-center justify-between cursor-pointer">
         <div className="flex items-center   ml-3">
           <div className="w-14 h-14 rounded-full overflow-hidden">
-          <img src={usermeesage.profilePhoto?usermeesage.profilePhoto:profileimage} alt="profile image" />
+          <img src={usermeesage?.profileimage? usermeesage?.profileimage.profileimage:profileimage} alt="profile image" />
           </div>
           <div className="ml-2">
-            <h1>{usermeesage.name}</h1>
-            <p className="text-gray-500 text-xs">{usermeesage.number}</p>
+            <h1>{usermeesage?.name}</h1>
+            <p className="text-gray-500 text-xs">{usermeesage?.number}</p>
           </div>
         </div>
 
@@ -179,6 +202,8 @@ function Spacificuser({userid}) {
           <PiStickerBold className="text-2xl text-gray-500 cursor-pointer" />
           <input
             type="text"
+            onFocus={()=>{setFocusing(true)}}
+            onBlur={()=>setFocusing(false)}
             className="mx-5 w-full outline-none"
             placeholder="Type a message"
           />
@@ -187,20 +212,23 @@ function Spacificuser({userid}) {
           <input
             type="file"
             className="hidden"
+           
             onChange={(e) => {
               // Handle file upload logic here
               const file = e.target.files[0];
               console.log("Selected file:", file);
             }}
           />
-          <IoMdMic className="text-2xl text-gray-500 cursor-pointer" />
+          {focusing?(<LuSendHorizontal className="text-2xl text-gray-500 cursor-pointer" />):(<IoMdMic className="text-2xl text-gray-500 cursor-pointer" />)}
         </div>
       </div>
       {/* ------dispaly iser messages ------- */}
 
       
       <div>
-        {usermeesage.body}
+        {/* {usermeesage.number} */}
+        {usermeesage?.name}
+
       </div>
     </div>
   );

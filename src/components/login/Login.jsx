@@ -15,10 +15,11 @@ import { loginvalid } from "../Form_validation/loginFormSchema";
 import Otpfeald from "./Otpfeald";
 import Home from "../Home/Home";
 import { Product } from "../Component/Productcontext";
+import { axiosPrivate } from "../../Axiosinstens";
 
 function Login() {
-  const [state, setState] = useState("page-1");
-  const [status, setStatus] = useState(false);
+  // const [state, setState] = useState("page-1");
+  // const [status, setStatus] = useState(false);
   // const navigate = useNavigate()
 
   const countries = [
@@ -42,30 +43,69 @@ function Login() {
         phonenumber: "",
       },
       validationSchema: loginvalid,
-      onSubmit: (value, e) => {
-        e.target.preventDefault();
-        console.log("value", value);
+      onSubmit: async (values) => {
+        try {
+          // Post the form values to the server
+          const {phonenumber} = values
+          const res = await axiosPrivate.post("/",{number:phonenumber});
+          console.log("res post contact", res.data);
+          settabs("page-3")
+        } catch (error) {
+          console.log("Error in contact post", error);
+        }
       },
     });
-  console.log("errors", errors.phonenumber);
-  const loginstatus = () => {
-    setlogin(false);
-    const storage = localStorage.setItem("user",false)
-    console.log("storage",storage)
-  };
+  // console.log("errors", errors.phonenumber);
+  // const loginstatus = () => {
+  //   setlogin(false);
+  //   const storage = localStorage.setItem("user",false)
+  //   console.log("storage",storage)
+  // };
 
   
   // setlogin(getstiorege)
 
 useEffect(()=>{
-  const item = localStorage.getItem("user")
-  item && setlogin(item)
-},[])
+  
+},[login])
+const item = localStorage.getItem("user")
+  console.log("lockel item ",item)
+   setlogin(item)
+// console.log("login state",login);
+
+////// ----------------------------------  update user profile and upload image ---------------------------------- ////////
+
+
+const [name, setName] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+
+  const handleFileChange = (e) => {
+    setProfileImage(e.target.files[0]);
+  };
+
+  const handleSubmite = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("image", profileImage);
+
+    try {
+      const response = await axiosPrivate.post("/adduserdetails", formData);
+      console.log("Profile submitted successfully:", response.data);
+      setlogin(false)
+      const storage = localStorage.setItem("user",false)
+
+    } catch (error) { 
+      console.error("Error uploading profile:", error);
+    }
+  };
+
 
   return (
     <>
-      {login ? (
-        <div className="m-4">
+      {!login ? (
+        <div className="m-2">
           <div>
             <div className="flex justify-between">
               <img
@@ -74,7 +114,7 @@ useEffect(()=>{
                 alt="whatsapp logo"
               />
 
-              <button className="bg-green-500 rounded-full border w-40 h-14 text-lg border-black mt-3 mr-10 flex justify-center gap-2 px-4 py-2">
+              <button className="bg-green-500 rounded-full border w-40 h-14 text-lg border-black mt-3 mr-10 flex justify-center items-center gap-2 px-4 py-2">
                 Download <RiDownloadLine />
               </button>
             </div>
@@ -201,7 +241,7 @@ useEffect(()=>{
                         <div className="flex justify-center mt-14">
                           <button
                             className="p-2 bg-green-800 text-white rounded-full w-20"
-                            onClick={() => settabs("page-3")}
+                            type="submit"                           
                           >
                             Next
                           </button>
@@ -244,7 +284,7 @@ useEffect(()=>{
                         </span>
                       </div>
                       <div className="w-full h-full flex justify-center ">
-                        <Otpfeald settabs={settabs} />
+                        <Otpfeald settabs={settabs} number={values.phonenumber} />
                       </div>
 
                       <div className="max-w-xl">
@@ -289,46 +329,43 @@ useEffect(()=>{
                   </div>
                 )}
                 {tabs == "page-4" && (
-                  <div className="w-full h-full flex justify-center items-center mb-32">
-                    <div className="flex flex-col items-center text-center">
-                      <div className="w-32 h-32 overflow-hidden rounded-full flex justify-center items-center relative">
-                        <img
-                          src={profileimage}
-                          alt="User Profile Image"
-                          className="w-full h-full object-cover"
-                        />
-
-                        <input
-                          id="file-upload"
-                          type="file"
-                          className="absolute w-full h-full opacity-0 cursor-pointer"
-                          // onChange={(e) => handleFileChange(e)} // Handle file selection
-                        />
-                      </div>
-
-                      <h1 className="text-sm text-slate-400 mt-2">
-                        Click and upload profile image
-                      </h1>
-
-                      <form
-                        action=""
-                        className="mt-4"
-                        onSubmit={(e) => e.preventDefault()}
-                      >
-                        <input
-                          type="text"
-                          placeholder="Enter your name..."
-                          className="border-b-2 border-slate-400 p-2 focus:outline-none focus:border-b-green-500 w-80"
-                        />
-                        <button
-                          onClick={loginstatus}
-                          className="bg-green-500 w-16 h-8 ml-3 m-3 rounded-md"
-                        >
-                          Login
-                        </button>
-                      </form>
-                    </div>
-                  </div>
+                   <div className="w-full h-full flex justify-center items-center mb-32">
+                   <div className="flex flex-col items-center text-center">
+                     <div className="w-32 h-32 overflow-hidden rounded-full flex justify-center items-center relative">
+                       <img
+                         src={profileImage ? URL.createObjectURL(profileImage) : 'default-image-url'}
+                         alt="User Profile Image"
+                         className="w-full h-full object-cover"
+                       />
+                       <input
+                         id="file-upload"
+                         type="file"
+                         className="absolute w-full h-full opacity-0 cursor-pointer"
+                         onChange={handleFileChange}
+                       />
+                     </div>
+             
+                     <h1 className="text-sm text-slate-400 mt-2">
+                       Click and upload profile image
+                     </h1>
+             
+                     <form className="mt-4" onSubmit={handleSubmite}>
+                       <input
+                         type="text"
+                         placeholder="Enter your name..."
+                         className="border-b-2 border-slate-400 p-2 focus:outline-none focus:border-b-green-500 w-80"
+                         value={name}
+                         onChange={(e) => setName(e.target.value)}
+                       />
+                       <button
+                         type="submit"
+                         className="bg-green-500 w-16 h-8 ml-3 m-3 rounded-md"
+                       >
+                         Submit
+                       </button>
+                     </form>
+                   </div>
+                 </div>
                 )}
               </div>
             </div>

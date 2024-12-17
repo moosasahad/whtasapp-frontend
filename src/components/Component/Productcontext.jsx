@@ -1,22 +1,41 @@
 import React, { useEffect, useState } from 'react'
 import { createContext } from 'react'
+import { axiosPrivate } from '../../Axiosinstens';
 export const Product = createContext();
 function Productcontext({children}) {
     const[state,setState]=useState(null)
     const[userid,setusesrid]=useState('')
-    console.log("userid---",userid);
+    // console.log("userid---",userid);
     const [login,setlogin]=useState(true)
     const [tabs,settabs]=useState('page-1')
-    const [owner,setOwner]=useState({
-        id: 1,
-                  name: "Moosa sahad pk",
-                  number: "+1234567890",
-                  profilePhoto: "https://imgs.search.brave.com/vgTiX1UVJWxFqIuZ7JizAkeSs9Mm5igjGG5sN-68f0E/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cG5nYWxsLmNvbS93/cC1jb250ZW50L3Vw/bG9hZHMvNS9Qcm9m/aWxlLnBuZw",
-                  title: "Software Engineer",
-                  body: "Experienced in developing web applications using modern frameworks."
-    })
+    const [owner,setOwner]=useState([])
     
+
     useEffect(()=>{
+      async function  hjdgsgfj  (params) {
+        
+      {
+        try {
+          const res =await axiosPrivate.get("/getspacificuser")
+      console.log("res.userdat",res.data)
+      setOwner(res.data.data)
+        } catch (error) {
+          console.log("user erro",error)
+        }
+      }
+    }
+      hjdgsgfj()
+    },[])
+
+    console.log("fghjkl;",owner);
+    
+
+
+
+
+
+    useEffect(()=>{
+
         setState(
             [
                 {

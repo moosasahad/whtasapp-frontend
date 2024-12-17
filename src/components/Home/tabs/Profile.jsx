@@ -24,7 +24,7 @@ function Profile() {
   <div className="w-64 h-64 rounded-full overflow-hidden">
     <img
       className="w-full h-full object-cover"
-      src={owner ? owner.profilePhoto : profileimage}
+      src={owner ? owner.profileimage : profileimage}
       alt="Profile"
     />
   </div>
@@ -54,7 +54,7 @@ function Profile() {
             <p className='text-gray-500 text-sm'>Your name</p>
             {edit?(
                 <div className='flex justify-between py-6'>
-                <h1>{inpu}</h1>
+                <h1>{owner.name}</h1>
                 <span className='cursor-pointer w-5 h-5' onClick={()=>setEdit(!edit)}>
                     <FaPen className='text-gray-500'/>
                 </span>
@@ -64,7 +64,7 @@ function Profile() {
                 <div className='flex justify-between py-6'>
                     <input type="text"
                     onChange={(e)=>setInput(e.target.value)}
-                    value={inpu}
+                    value={owner.name}
                     className='outline-none border-b-2 border-gray-500 w-full'
                     />
                 <span className='cursor-pointer'  onClick={()=>setEdit(!edit)}>
@@ -83,7 +83,7 @@ function Profile() {
         {abouedit?(
             
                 <div className='flex justify-between py-6'>
-                <h1>{owner.title}</h1>
+                <h1>{owner.about}</h1>
                 <span className='cursor-pointer w-5 h-5' onClick={()=>setaboutEdit(!edit)}>
                     <FaPen className='text-gray-500'/>
                 </span>
@@ -93,7 +93,7 @@ function Profile() {
                 <div className='flex justify-between py-6'>
                     <input type="text"
                     onChange={(e)=>setInput(e.target.value)}
-                    value={inpu}
+                    value={owner.about}
                     className='outline-none border-b-2 border-gray-500 w-full'
                     />
                 <span className='cursor-pointer'  onClick={()=>setaboutEdit(!edit)}>

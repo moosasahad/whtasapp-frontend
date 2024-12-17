@@ -1,15 +1,36 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FiArrowLeft } from "react-icons/fi";
 import { IoMdSearch } from "react-icons/io";
 import { MdGroup } from "react-icons/md";
 import { FaUser } from "react-icons/fa6";
 import { MdGroups2 } from "react-icons/md";
+import { axiosPrivate } from '../../../Axiosinstens';
+import { Product } from '../../Component/Productcontext';
 
 
 
 
 
 function Contacts({setTabs}) {
+  const [contatc,setContact]=useState([])
+  const {setusesrid} = useContext(Product)
+
+  useEffect(()=>{
+    const contact = async ()=>{
+      try {
+        const res = await axiosPrivate.get("/getallcontatc");
+        console.log("res post contact", res.data.data);
+        setContact(res.data.data.contacts)
+      } catch (error) {
+        console.log("Error in contact post", error);
+      }
+    }
+    contact()
+  },[])
+
+
+
+
   return (
     <div className=''>
       <div className='flex gap-7 pl-3'>
@@ -25,7 +46,7 @@ function Contacts({setTabs}) {
         </button>
         <input 
         type="text" 
-        placeholder='Searc name or number'
+        placeholder='Search name or number'
         className='w-full bg-slate-200 p-1 pl-16 rounded-md'
         />
       </div>
@@ -51,6 +72,26 @@ function Contacts({setTabs}) {
       </div>
       <div className='ml-4 my-8 '>
        <h1> CONTACTS ON WHATSAPP</h1>
+
+       <div>
+        <div className='overflow-y-auto h-96'>
+          {
+            contatc.map((value)=>(
+              <div className='h-auto m-2 bg-slate-100 border-b-2 border-gray-300 cursor-pointer flex items-center' onClick={()=>setusesrid(value._id)} >
+               <div className='w-20 h-20 overflow-hidden mr-5'>
+               <img src={value?.profileimage.profileimage} alt=""
+                className='w-20 h-20 object-cover'
+                />
+               </div>
+               <div>
+               <h1 className='text-gray-500 text-xl'>{value.name}</h1>
+               <h5 className='text-gray-400 text-sm'>{value.number}</h5>
+               </div>
+              </div>
+            ))
+          }
+        </div>
+       </div>
       </div>
     </div>
   )
