@@ -10,13 +10,24 @@ import { MdBrightnessAuto } from "react-icons/md";
 import { BiSolidHelpCircle } from "react-icons/bi";
 import { IoIosLogOut } from "react-icons/io";
 import { TbLogout } from "react-icons/tb";
+import { usercontext } from '../../Component/Usercontext';
 import { Product } from '../../Component/Productcontext';
 
 
 
 
+
 function Settings({setTabs}) {
-    const {owner} = useContext(Product)
+    const {state}= useContext(usercontext)
+    const {settabs,setlogin}= useContext(Product)
+
+    const logoutfunction = ()=>{
+      setlogin(true)
+      settabs('page-1')
+      localStorage.removeItem("user")
+    }
+
+
   return (
     <div>
        <h1 className='text-2xl font-bold'>Settings</h1>
@@ -35,13 +46,13 @@ function Settings({setTabs}) {
       <div className="w-24 h-24 rounded-full overflow-hidden m-3">
     <img
       className="w-full h-full object-cover"
-      src={owner ? owner.profilePhoto : profileimage}
+      src={state ? state?.profileimage : profileimage}
       alt="Profile"
     />
   </div>
         <div>
-            <h1>{owner.name}</h1>
-            <p className='text-sm text-gray-500'>{owner.title}</p>
+            <h1>{state?.name}</h1>
+            <p className='text-sm text-gray-500'>{state.about}</p>
         </div>
       </div>
 
@@ -85,7 +96,7 @@ function Settings({setTabs}) {
         <span >
             <TbLogout className='text-2xl text-red-500 '/>
         </span>
-        <h2 className='ml-7 text-xl text-red-500 font-thin '>Log out</h2>
+        <h2 className='ml-7 text-xl text-red-500 font-thin cursor-pointer'onClick={logoutfunction}>Log out</h2>
       </div>
       
     </div>

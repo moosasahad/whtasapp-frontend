@@ -1,137 +1,106 @@
 import React, { useEffect, useState } from 'react'
 import { createContext } from 'react'
 import { axiosPrivate } from '../../Axiosinstens';
+import { Input } from 'postcss';
 export const Product = createContext();
 function Productcontext({children}) {
     const[state,setState]=useState(null)
     const[userid,setusesrid]=useState('')
+  const [groupuserid,setgroupuserid]=useState(null)
+
     // console.log("userid---",userid);
     const [login,setlogin]=useState(true)
     const [tabs,settabs]=useState('page-1')
-    const [owner,setOwner]=useState([])
+    const [messagess,setmessages]=useState([])
+    const [file,setfile]=useState()
+
+
     
+    
+    // --------- getmessage sender --------------//
 
     useEffect(()=>{
-      async function  hjdgsgfj  (params) {
-        
-      {
+      const getmessager =async ()=>{
         try {
-          const res =await axiosPrivate.get("/getspacificuser")
-      console.log("res.userdat",res.data)
-      setOwner(res.data.data)
+          const res =await axiosPrivate.get("/getallmessagers")
+          console.log("getmessager",res?.data.data.findeddata)
+            setState(res?.data.data.findeddata)
+          
         } catch (error) {
-          console.log("user erro",error)
+          console.log("error",error)
         }
       }
-    }
-      hjdgsgfj()
+      getmessager()
     },[])
 
-    console.log("fghjkl;",owner);
+
+  
+
+    // ---------------------------------- send message ---------------------- /// 
+    const [inputfild,setinputfild]= useState("")
+    console.log("jsdhsad",inputfild)
+
+    const sendmessage =async ()=>{
+      const formData = new FormData();
+      formData.append("message", inputfild?.message);
+      formData.append("files", inputfild?.files);
+      formData.append("receivernumber", inputfild?.receivernumber);
+      formData.append("receiverid", inputfild?.receiverid);
+
+      try {
+        const res = await axiosPrivate.post("/sendmessage",formData)
+        console.log("post messageee",res.data)
+        getspacificuser()
+        
+        
+      } catch (error) {
+        console.log("post message error",error)
+        
+      }
+    }
+
+
+    //------------------- get spacific messager ------------------//
+    console.log("sdfghj234567890==",userid)
+    const getspacificuser =async ()=>{
+      try {
+        console.log("sdfghj234567890==///",userid)
+        const res =await axiosPrivate.get(`/getmessaeg/${userid}`)
+        console.log("get spacific messager",res?.data.data.messages)          
+        setmessages(res?.data.data.messages)
+      } catch (error) {
+        console.log("error",error)
+      }
+    }
+    useEffect(()=>{
+      
+      getspacificuser()
+    },[userid])
+
     
 
+console.log("filess ----- files",file);
 
 
 
 
-    useEffect(()=>{
 
-        setState(
-            [
-                {
-                  id: 1,
-                  name: "John Doe",
-                  number: "+1234567890",
-                  profilePhoto: "https://via.placeholder.com/150",
-                  title: "Software Engineer",
-                  body: "Experienced in developing web applications using modern frameworks."
-                },
-                {
-                  id: 2,
-                  name: "Jane Smith",
-                  number: "+9876543210",
-                  profilePhoto: "https://via.placeholder.com/150",
-                  title: "Product Manager",
-                  body: "Specializes in agile methodologies and cross-functional team leadership."
-                },
-                {
-                  id: 3,
-                  name: "Alice Johnson",
-                  number: "+1122334455",
-                  profilePhoto: "https://via.placeholder.com/150",
-                  title: "UX Designer",
-                  body: "Passionate about creating user-centered designs and improving usability."
-                },
-                {
-                  id: 4,
-                  name: "Bob Williams",
-                  number: "+9988776655",
-                  profilePhoto: "https://via.placeholder.com/150",
-                  title: "Data Scientist",
-                  body: "Expert in machine learning, data analysis, and visualization."
-                },
-                {
-                  id: 5,
-                  name: "Sarah Brown",
-                  number: "+7766554433",
-                  profilePhoto: "https://via.placeholder.com/150",
-                  title: "Marketing Specialist",
-                  body: "Proficient in digital marketing, SEO, and social media strategies."
-                },
-                {
-                  id: 6,
-                  name: "Mike Davis",
-                  number: "+5432109876",
-                  profilePhoto: "https://via.placeholder.com/150",
-                  title: "Web Developer",
-                  body: "Skilled in front-end and back-end development using modern technologies."
-                },
-                {
-                  id: 7,
-                  name: "Emily Wilson",
-                  number: "+6789012345",
-                  profilePhoto: "https://via.placeholder.com/150",
-                  title: "Data Analyst",
-                  body: "Experienced in analyzing large datasets and creating actionable insights."
-                },
-                {
-                  id: 8,
-                  name: "David Lee",
-                  number: "+9876543210",
-                  profilePhoto: "https://via.placeholder.com/150",
-                  title: "Project Manager",
-                  body: "Expert in managing complex projects, ensuring deadlines and budgets are met."
-                },
-                {
-                  id: 9,
-                  name: "Jessica Martinez",
-                  number: "+1230987654",
-                  profilePhoto: "",
-                  title: "Content Creator",
-                  body: "Creates engaging content for various platforms to enhance brand presence."
-                },
-                {
-                  id: 10,
-                  name: "Chris Brown",
-                  number: "+5678901234",
-                  profilePhoto: "https://via.placeholder.com/150",
-                  title: "Graphic Designer",
-                  body: "Specializes in creating visual content, logos, and branding materials."
-                }
-              ]
-              
-        
-          )
-    },[])
     const obj = {
         state,
         setusesrid,
         userid,
-        owner,
+        groupuserid,
+        setgroupuserid,
         login,
         setlogin,
         tabs,
         settabs,
+        messagess,
+        setinputfild,
+        sendmessage,
+        setfile,
+        file,
+        getspacificuser,
     };
   return (
     <Product.Provider value={obj}>

@@ -24,7 +24,7 @@ function Chats({setTabs}) {
       localStorage.removeItem("user")
     }
 
-   
+   console.log("value in chat ",value)
   return (
     <div>
       <div className='flex justify-between mt-3 '>
@@ -85,17 +85,17 @@ function Chats({setTabs}) {
       style={{ scrollbarWidth: 'thin',height:'480px' }}
       >
         {value && value.map((value)=>(
-            <div key={value.id} className='flex items-center my-5 border-b-2 p-2 cursor-pointer' onClick={()=>setusesrid(value.id)}>
+            <div key={value.id} className='flex items-center my-5 border-b-2 p-2 cursor-pointer' onClick={()=>setusesrid(value._id)}>
                 <div className='w-14 h-14 rounded-full overflow-hidden  mr-3 '>
                     <img
-                     src={value.profilePhoto ? value.profilePhoto : profile}
+                     src={value.reciverid.profileimage.profileimage ? value?.reciverid.profileimage.profileimage:profile}
                      alt="user profile photo"
                      className="w-full h-full object-cover"
                      />
                     </div>
                 <div>
-                    <h1 className='text-xl'>{value.name}</h1>
-                    <p className='text-gray-500 font-sans'>{value.title}</p>
+                    <h1 className='text-xl'>{value?.reciverid.name}</h1>
+                    <p className='text-gray-500 font-sans'>{value?.recivernumber}</p>
                 </div>
             </div>
         ))}

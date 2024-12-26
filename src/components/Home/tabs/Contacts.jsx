@@ -4,31 +4,19 @@ import { IoMdSearch } from "react-icons/io";
 import { MdGroup } from "react-icons/md";
 import { FaUser } from "react-icons/fa6";
 import { MdGroups2 } from "react-icons/md";
-import { axiosPrivate } from '../../../Axiosinstens';
-import { Product } from '../../Component/Productcontext';
+import { contactcontext } from '../../Component/Contact';
 
 
 
 
 
 function Contacts({setTabs}) {
-  const [contatc,setContact]=useState([])
-  const {setusesrid} = useContext(Product)
-
-  useEffect(()=>{
-    const contact = async ()=>{
-      try {
-        const res = await axiosPrivate.get("/getallcontatc");
-        console.log("res post contact", res.data.data);
-        setContact(res.data.data.contacts)
-      } catch (error) {
-        console.log("Error in contact post", error);
-      }
-    }
-    contact()
-  },[])
-
-
+  const {state,input,setinput,sercheddata} = useContext(contactcontext)
+  const handilChange = (e)=>{
+    setinput(e.target.value)
+    console.log("shdjkahd",input)
+  }
+  console.log("asdasd",sercheddata)  
 
 
   return (
@@ -48,6 +36,7 @@ function Contacts({setTabs}) {
         type="text" 
         placeholder='Search name or number'
         className='w-full bg-slate-200 p-1 pl-16 rounded-md'
+        onChange={handilChange}
         />
       </div>
       <div className='flex items-center gap-5 my-4 cursor-pointer'onClick={()=>setTabs('newcontacts')}>
@@ -74,9 +63,29 @@ function Contacts({setTabs}) {
        <h1> CONTACTS ON WHATSAPP</h1>
 
        <div>
-        <div className='overflow-y-auto h-96'>
+        {input ? (
+          <div>
+            {
+            sercheddata.data?.map((value)=>(
+              <div className='h-auto m-2 bg-slate-100 border-b-2 border-gray-300 cursor-pointer flex items-center' onClick={()=>setusesrid(value._id)} >
+               <div className='w-20 h-20 rounded-full overflow-hidden mr-5'>
+               <img src={value?.profileimage.profileimage} alt="user profile"
+                className='w-20 h-20 object-cover rounded-full'
+                />
+               </div>
+               <div>
+               <h1 className='text-gray-500 text-xl'>{value.name}</h1>
+               <h5 className='text-gray-400 text-sm'>{value.number}</h5>
+               </div>
+              </div>
+            ))
+          }
+  kdsjjkhfjkshf
+          </div>
+        ):(
+          <div className='overflow-y-auto h-96'>
           {
-            contatc.map((value)=>(
+            state?.map((value)=>(
               <div className='h-auto m-2 bg-slate-100 border-b-2 border-gray-300 cursor-pointer flex items-center' onClick={()=>setusesrid(value._id)} >
                <div className='w-20 h-20 overflow-hidden mr-5'>
                <img src={value?.profileimage.profileimage} alt=""
@@ -91,6 +100,7 @@ function Contacts({setTabs}) {
             ))
           }
         </div>
+        )}
        </div>
       </div>
     </div>

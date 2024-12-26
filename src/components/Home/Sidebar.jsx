@@ -7,9 +7,13 @@ import metai from "../../Images/metai.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import profileimage from "../../Images/profile image.png";
 import { Product } from "../Component/Productcontext";
+import { usercontext } from "../Component/Usercontext";
 
 function Sidebar({setTabs}) {
   const {owner} = useContext(Product)
+  const {state} = useContext(usercontext)
+  console.log("side bar profile",state);
+  
   return (
     <div className="w-16 h-screen flex flex-col justify-between items-center py-4 bg-slate-100">
       {/* Top Section */}
@@ -69,11 +73,11 @@ function Sidebar({setTabs}) {
             Settings
           </span>
         </button>
-        <button className="w-10 h-10 flex justify-center items-center rounded-full relative focus:bg-gray-300 group"
+        <button className="w-10 h-10 flex justify-center items-center rounded-full overflow-hidden relative focus:bg-gray-300 group"
         onClick={()=>setTabs("profile")}
         >
           <img
-            src={owner?owner.profileimage:profileimage}
+            src={state?state?.profileimage:profileimage}
             alt="profile image"
             className="w-full h-full object-cover"
           />

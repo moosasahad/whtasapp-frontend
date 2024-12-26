@@ -8,12 +8,12 @@ function App() {
 
 
   return (
-    <>
+    <div className='h-screen'>
     <Routes>
       <Route path='/' element={<Login/>}/>
       {/* <Route path='/home' element={<Home/>}/> */}
     </Routes>
-    </>
+    </div>
   )
 }
 

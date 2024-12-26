@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { MdOutlineSearch } from "react-icons/md";
+import { groupcontextsender } from '../../Component/groupcontext';
+import { Product } from '../../Component/Productcontext';
 
 
 function Channels({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
+    const {setgroupuserid} = useContext(Product)
+    const {groups} = useContext(groupcontextsender)
+    console.log("groups",groups)
   return (
     <div>
        <div className='flex justify-between mt-3'>
@@ -30,6 +35,21 @@ function Channels({setTabs}) {
         placeholder='Search name or number'
         className='w-full bg-slate-200 p-1 pl-16 rounded-md'
         />
+      </div>
+      {/* ////////////////// display groups //////////////////////// */}
+      <div>
+          {
+            groups?.map((item)=>(
+              <div className='flex items-center gap-4 border-b-2 cursor-pointer' onClick={()=>setgroupuserid(item._id)}>
+                <img 
+                src={item.groupImage} 
+                alt="" 
+                className='w-20 h-20'
+                />
+                <h1 className='text-xl'>{item.groupName}</h1>
+              </div>
+            ))
+          }
       </div>
     </div>
   )

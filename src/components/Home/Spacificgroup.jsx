@@ -25,16 +25,18 @@ import { MdFullscreen } from "react-icons/md";
 import { MdDownload } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
 import { FaChevronDown } from "react-icons/fa";
+import { groupcontextsender } from "../Component/groupcontext";
 
 
 
 
 
-function Spacificuser({ userid }) {
+function Spacificgroup({ userid }) {
   const [focus, setFocus] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [pop, setpop] = useState(false);
-  const { state, messagess,setinputfild,sendmessage,setfile,file,getspacificuser } = useContext(Product);
+  const {groups} = useContext(groupcontextsender)
+  const { state, messagess,setinputfild,sendmessage,setfile,file,getspacificuser,groupuserid } = useContext(Product);
   const [userids, setuserid] = useState(null);
   const [focusing, setFocusing] = useState("");
   const {state:user} = useContext(usercontext)
@@ -44,6 +46,8 @@ function Spacificuser({ userid }) {
     message:"",
     files:"",
   })
+  const spacificgroup = groups?.find((item)=>item._id == groupuserid)
+  console.log("spacificgroupsdajdhjahdjksahs////////////////",spacificgroup)
   const [dropdown,setdropdown]=useState(false)
   setinputfild(postinvalue)
   console.log("postinvalue /////// postinvalue",postinvalue)
@@ -163,18 +167,14 @@ const expandlist = (id)=>{
           <div className="w-14 h-14 rounded-full overflow-hidden">
             <img
               src={
-                messagess.reciverid
-                  ? messagess?.reciverid.profileimage.profileimage
+                spacificgroup.groupImage? spacificgroup?.groupImage
                   : profileimage
               }
               alt="profile image"
             />
           </div>
           <div className="ml-2">
-            <h1>{messagess?.reciverid?.name}</h1>
-            <p className="text-gray-500 text-xs">
-              {messagess?.reciverid?.number}
-            </p>
+            <h1>{spacificgroup.groupName}</h1>
           </div>
         </div>
 
@@ -360,7 +360,7 @@ const expandlist = (id)=>{
       {/* ------dispaly user messages ------- */}
 
       <div className="overflow-y-scroll h-5/6 pb-5 messages-container">
-      {messagess?.message?.map((item) => (
+      {spacificgroup?.messages?.map((item) => (
   <div
     className={`flex ${
       item?.sendernumber == user.number ? "justify-end" : "justify-start"
@@ -441,4 +441,4 @@ const expandlist = (id)=>{
   );
 }
 
-export default memo(Spacificuser);
+export default memo(Spacificgroup);

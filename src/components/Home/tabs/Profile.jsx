@@ -3,20 +3,20 @@ import profileimage from "../../../Images/profile image.png"
 import { FaPen } from "react-icons/fa";
 import { FiCheck } from 'react-icons/fi';
 import { IoCamera } from "react-icons/io5";
-import { Product } from '../../Component/Productcontext';
+import { usercontext } from '../../Component/Usercontext';
 
 
 
 function Profile() {
     const [edit,setEdit]=useState(true)
     const [abouedit,setaboutEdit]=useState(true)
-    const {owner} =useContext(Product)
-    console.log("sdfghjk profile",owner);
+    const {state} = useContext(usercontext)
+    console.log("sdfghjk profile",state);
     
 
-    const[inpu,setInput]=useState(owner.name)
+    const[inpu,setInput]=useState("jhsjd")
   return (
-    <div>
+    <div className='overflow-x-scroll h-full'>
         <div className="relative">
   <h1 className="text-2xl font-bold mb-4">Profile</h1>
   <div className="w-64 h-64 flex justify-center items-center relative mx-auto">
@@ -24,7 +24,7 @@ function Profile() {
   <div className="w-64 h-64 rounded-full overflow-hidden">
     <img
       className="w-full h-full object-cover"
-      src={owner ? owner.profileimage : profileimage}
+      src={state ? state.profileimage : profileimage}
       alt="Profile"
     />
   </div>
@@ -50,11 +50,11 @@ function Profile() {
 </div>
 
 </div>
-        <div className='text-gray-500 p-5'>
+        <div className='text-gray-500 p-5 '>
             <p className='text-gray-500 text-sm'>Your name</p>
             {edit?(
                 <div className='flex justify-between py-6'>
-                <h1>{owner.name}</h1>
+                <h1>{state?.name}</h1>
                 <span className='cursor-pointer w-5 h-5' onClick={()=>setEdit(!edit)}>
                     <FaPen className='text-gray-500'/>
                 </span>
@@ -64,7 +64,7 @@ function Profile() {
                 <div className='flex justify-between py-6'>
                     <input type="text"
                     onChange={(e)=>setInput(e.target.value)}
-                    value={owner.name}
+                    value={state?.name}
                     className='outline-none border-b-2 border-gray-500 w-full'
                     />
                 <span className='cursor-pointer'  onClick={()=>setEdit(!edit)}>
@@ -73,6 +73,10 @@ function Profile() {
                 </div>
             )}
         </div>
+        <p className='text-gray-500 text-sm ml-4'>Your number</p>
+        <div className='flex justify-between py-6 text-gray-500 ml-6'>
+                <h1>{state?.number}</h1>
+                </div>
         <div>
             <p className='p-3 text-xs text-gray-500 bg-slate-200 my-5'>
             This is not your username or PIN. This name will be visible to your WhatsApp contacts.
@@ -83,7 +87,7 @@ function Profile() {
         {abouedit?(
             
                 <div className='flex justify-between py-6'>
-                <h1>{owner.about}</h1>
+                <h1>{state?.about}</h1>
                 <span className='cursor-pointer w-5 h-5' onClick={()=>setaboutEdit(!edit)}>
                     <FaPen className='text-gray-500'/>
                 </span>
@@ -93,7 +97,7 @@ function Profile() {
                 <div className='flex justify-between py-6'>
                     <input type="text"
                     onChange={(e)=>setInput(e.target.value)}
-                    value={owner.about}
+                    value={state?.about}
                     className='outline-none border-b-2 border-gray-500 w-full'
                     />
                 <span className='cursor-pointer'  onClick={()=>setaboutEdit(!edit)}>
