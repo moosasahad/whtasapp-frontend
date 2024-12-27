@@ -5,6 +5,7 @@ import { MdGroup } from "react-icons/md";
 import { FaUser } from "react-icons/fa6";
 import { MdGroups2 } from "react-icons/md";
 import { contactcontext } from '../../Component/Contact';
+import { Product } from '../../Component/Productcontext';
 
 
 
@@ -12,6 +13,7 @@ import { contactcontext } from '../../Component/Contact';
 
 function Contacts({setTabs}) {
   const {state,input,setinput,sercheddata} = useContext(contactcontext)
+  const {setusesrid} = useContext(Product)
   const handilChange = (e)=>{
     setinput(e.target.value)
     console.log("shdjkahd",input)
@@ -67,7 +69,7 @@ function Contacts({setTabs}) {
           <div>
             {
             sercheddata.data?.map((value)=>(
-              <div className='h-auto m-2 bg-slate-100 border-b-2 border-gray-300 cursor-pointer flex items-center' onClick={()=>setusesrid(value._id)} >
+              <div className='h-auto m-2 bg-slate-100 border-b-2 border-gray-300 cursor-pointer flex items-center' onClick={()=>setusesrid({id:value?.profileimage._id,page:"chat"})} >
                <div className='w-20 h-20 rounded-full overflow-hidden mr-5'>
                <img src={value?.profileimage.profileimage} alt="user profile"
                 className='w-20 h-20 object-cover rounded-full'
@@ -86,10 +88,10 @@ function Contacts({setTabs}) {
           <div className='overflow-y-auto h-96'>
           {
             state?.map((value)=>(
-              <div className='h-auto m-2 bg-slate-100 border-b-2 border-gray-300 cursor-pointer flex items-center' onClick={()=>setusesrid(value._id)} >
-               <div className='w-20 h-20 overflow-hidden mr-5'>
+              <div className='h-auto m-2 bg-slate-100 border-b-2 p-3 border-gray-300 cursor-pointer flex items-center' onClick={()=>setusesrid({id:value.profileimage._id, page:"chat"})} >
+               <div className='w-16 h-16  overflow-hidden mr-8'>
                <img src={value?.profileimage.profileimage} alt=""
-                className='w-20 h-20 object-cover'
+                className='w-16 h-16 object-cover rounded-full'
                 />
                </div>
                <div>

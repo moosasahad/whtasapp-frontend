@@ -5,26 +5,19 @@ import { MdOutlineSearch } from 'react-icons/md';
 import { Product } from '../../Component/Productcontext';
 import { useEffect } from 'react';
 import profile from '../../../Images/profile image.png'
+import { contactcontext } from '../../Component/Contact';
 
 function Chats({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
     const {state,setusesrid,setlogin,login,settabs} = useContext(Product)
-    // console.log("asdfghjklchhat  chat ",state);
-    // console.log("dfghjk login state",login);
-    
-    
-    const [value,setValu]=useState([])
-    useEffect(()=>{
-        setValu(state)
-    },[state])
-    // console.log("product",state);
+    const {state:contacts} = useContext(contactcontext)
+    console.log("contacts==============contacts",contacts)
     const logutfunction = ()=>{
       setlogin(true)
       settabs('page-1')
       localStorage.removeItem("user")
     }
-
-   console.log("value in chat ",value)
+    console.log("state",state)
   return (
     <div>
       <div className='flex justify-between mt-3 '>
@@ -84,18 +77,18 @@ function Chats({setTabs}) {
       <div className='overflow-y-auto'
       style={{ scrollbarWidth: 'thin',height:'480px' }}
       >
-        {value && value.map((value)=>(
-            <div key={value.id} className='flex items-center my-5 border-b-2 p-2 cursor-pointer' onClick={()=>setusesrid(value._id)}>
+        {state?.map((value)=>(
+            <div key={value._id} className='flex items-center my-5 border-b-2 p-2 cursor-pointer' onClick={()=>setusesrid({id:value._id,page:"chat",number:value.number})}>
                 <div className='w-14 h-14 rounded-full overflow-hidden  mr-3 '>
                     <img
-                     src={value.reciverid.profileimage.profileimage ? value?.reciverid.profileimage.profileimage:profile}
+                     src={value.profileimage ? value.profileimage:profile}
                      alt="user profile photo"
                      className="w-full h-full object-cover"
                      />
                     </div>
                 <div>
-                    <h1 className='text-xl'>{value?.reciverid.name}</h1>
-                    <p className='text-gray-500 font-sans'>{value?.recivernumber}</p>
+                    <h1 className='text-xl'>{ contacts.find((item)=>item.profileimage._id == value._id)?.name || null}</h1>
+                    <p className='text-gray-500 font-sans'>{value?.number}</p>
                 </div>
             </div>
         ))}

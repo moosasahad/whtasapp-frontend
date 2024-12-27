@@ -31,32 +31,29 @@ import { groupcontextsender } from "../Component/groupcontext";
 
 
 
-function Spacificgroup({ userid }) {
+function Spacificgroup() {
   const [focus, setFocus] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [pop, setpop] = useState(false);
-  const {groups} = useContext(groupcontextsender)
-  const { state, messagess,setinputfild,sendmessage,setfile,file,getspacificuser,groupuserid } = useContext(Product);
+  const {groups,sendmessageongroup,postinvalue,setpostinvalue} = useContext(groupcontextsender)
+  const { getspacificuser,groupuserid,getgrups,userid } = useContext(Product);
   const [userids, setuserid] = useState(null);
   const [focusing, setFocusing] = useState("");
   const {state:user} = useContext(usercontext)
-  const [postinvalue,setpostinvalue] = useState({
-    receivernumber:messagess?.recivernumber,
-    receiverid:messagess?.reciverid?._id,
-    message:"",
-    files:"",
-  })
-  const spacificgroup = groups?.find((item)=>item._id == groupuserid)
-  console.log("spacificgroupsdajdhjahdjksahs////////////////",spacificgroup)
-  const [dropdown,setdropdown]=useState(false)
-  setinputfild(postinvalue)
-  console.log("postinvalue /////// postinvalue",postinvalue)
 
-  console.log("messagess",messagess.recivernumber,messagess?.reciverid?._id)
+  
+
+//////////////// FINDING SPACIFIC GROUP //////////////////////
+
+  const spacificgroup = groups?.find((item)=>item._id == userid.id)
+
+  console.log("sending group data",postinvalue)
+  const [dropdown,setdropdown]=useState(false)
   useEffect(() => {
     setuserid(userid);
     
   }, [userid]);
+
 
   const messagefild = (e) => {
     setMessage(e.target.value);
@@ -70,25 +67,18 @@ function Spacificgroup({ userid }) {
     if (container) {
       container.scrollTop = container.scrollHeight;
     }
-  }, [messagess])
+  }, [groups])
 
   const posttextmessage = (e)=>{
-    console.log("text input ",e.target.value)
-    console.log("dhajghsjag")
-    setpostinvalue((previce)=>(
-      {...previce,
-        message:e?.target?.value,
-        receivernumber:messagess?.recivernumber,
-        receiverid:messagess?.reciverid?._id,
-      }
-    ))
+    setpostinvalue({
+        groupid:spacificgroup?._id,
+        message:e.target.value,
+        
+    })
   }
   const uploadfile = (e)=>{
     setpostinvalue((previce)=>(
       {...previce,
-        // message:e.target.value,
-        receivernumber:messagess?.recivernumber,
-        receiverid:messagess?.reciverid?._id,
         files:e.target.files[0],
       }
     ))
@@ -96,7 +86,7 @@ function Spacificgroup({ userid }) {
     setfile(e.target.files[0])
     sendmessage()
   }
-console.log("hjgsadgashdgjas/......-.././")
+console.log("hjgsadgashdgjas/......-.././",postinvalue)
 
 
 
@@ -126,7 +116,7 @@ console.log("hjgsadgashdgjas/......-.././")
   //-----------------------message sending =-----------------//
 
   const messagesending =()=>{
-    sendmessage()
+    sendmessageongroup()
     setpostinvalue(
   {    message:"",}
     )
@@ -157,6 +147,9 @@ const expandlist = (id)=>{
   }
 
 }
+
+
+/////////////////////////////////////// chat gpt message samples ///////////////////////////////
   return (
     <div
       style={{ backgroundImage: `url(${background})` }}
@@ -250,21 +243,7 @@ const expandlist = (id)=>{
 
             
       <div className="absolute bottom-0 h-14 bg-slate-200 w-full">
-      {file && <span className=" w-full absolute bottom-full z-50 group h-80 overflow-y-scroll">
-            {file && <div>
-              <div className="controls absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <button className="group-hover:p-3 rounded-full group-hover:bg-slate-500" onClick={removeimage}><RxCross1 className="text-4xl font-extrabold text-white"/></button>
-          </div>
-              <img
-                         src={file ? URL.createObjectURL(file) : 'default-image-url'}
-                         alt="User Profile Image"
-                         className="w-full h-auto object-cover bg-black"
-                       />
-                       <video  src={file ? URL.createObjectURL(file) : 'default-image-url'}></video>
-            </div>
-
-        }
-            </span>}
+    
        <div className=" h-14 bg-slate-200 w-full flex justify-between items-center px-5 focus:bg-slate-400">
        <span
           title="Menu"

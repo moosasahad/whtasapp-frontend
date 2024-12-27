@@ -25,6 +25,8 @@ import { MdFullscreen } from "react-icons/md";
 import { MdDownload } from "react-icons/md";
 import { RxCross1 } from "react-icons/rx";
 import { FaChevronDown } from "react-icons/fa";
+import { contactcontext } from "../Component/Contact";
+import { CgRecord } from "react-icons/cg";
 
 
 
@@ -32,34 +34,46 @@ import { FaChevronDown } from "react-icons/fa";
 
 function Spacificuser({ userid }) {
   const [focus, setFocus] = useState(false);
+  const [inputvalu,setinputvalue]= useState("")
   const [sidebar, setSidebar] = useState(false);
   const [pop, setpop] = useState(false);
   const { state, messagess,setinputfild,sendmessage,setfile,file,getspacificuser } = useContext(Product);
   const [userids, setuserid] = useState(null);
   const [focusing, setFocusing] = useState("");
   const {state:user} = useContext(usercontext)
+  const [users,setuser] = useState("")
   const [postinvalue,setpostinvalue] = useState({
-    receivernumber:messagess?.recivernumber,
-    receiverid:messagess?.reciverid?._id,
+    receivernumber:users?.number,
     message:"",
     files:"",
   })
+  const {state:contact} = useContext(contactcontext)
+  console.log("contact in contact context",contact )
+  const findcontact = contact?.find((item)=>item.profileimage._id ==userid.id )
+  console.log("postinvalue,-=,postinvalue",findcontact)
+  const findmessagesender = state?.find((item)=>item._id == userid.id)
+  console.log("findmessagesender",state)
+ if(!findcontact){
+  useEffect(()=>{
+    setuser(findmessagesender)
+
+  },[userid])
+ }else{
+  useEffect(()=>{
+    setuser(findcontact)
+
+  },[userid])
+ }
+  console.log("userid = ",messagess)
+  console.log("state = ",user)
+
   const [dropdown,setdropdown]=useState(false)
   setinputfild(postinvalue)
   console.log("postinvalue /////// postinvalue",postinvalue)
-
-  console.log("messagess",messagess.recivernumber,messagess?.reciverid?._id)
   useEffect(() => {
     setuserid(userid);
     
   }, [userid]);
-
-  const messagefild = (e) => {
-    setMessage(e.target.value);
-    setFocusing(e.target.value);
-    // e.target.value.length >0 ?(setFocusing(true)):(setFocusing(false))
-  };
-  // console.log("focusing", messagess.message);
 
   useEffect(() => {
     const container = document.querySelector(".messages-container");
@@ -71,28 +85,24 @@ function Spacificuser({ userid }) {
   const posttextmessage = (e)=>{
     console.log("text input ",e.target.value)
     console.log("dhajghsjag")
-    setpostinvalue((previce)=>(
-      {...previce,
-        message:e?.target?.value,
-        receivernumber:messagess?.recivernumber,
-        receiverid:messagess?.reciverid?._id,
-      }
-    ))
+    setinputvalue(e.target.value)
+     setpostinvalue((prev) => ({
+      ...prev,
+      receivernumber: userid?.id,
+      message:e?.target?.value,
+    }))
   }
   const uploadfile = (e)=>{
-    setpostinvalue((previce)=>(
-      {...previce,
-        // message:e.target.value,
-        receivernumber:messagess?.recivernumber,
-        receiverid:messagess?.reciverid?._id,
-        files:e.target.files[0],
-      }
-    ))
+    setpostinvalue((prev) => ({
+      ...prev,
+      receivernumber: userid?.id,
+      files: e.target.files[0],
+    }))
     console.log(e.target.files[0])
     setfile(e.target.files[0])
     sendmessage()
   }
-console.log("hjgsadgashdgjas/......-.././")
+console.log("usersprofile/......-.././",users)
 
 
 
@@ -124,15 +134,18 @@ console.log("hjgsadgashdgjas/......-.././")
   const messagesending =()=>{
     sendmessage()
     setpostinvalue(
-  {    message:"",}
+  {    message:"",} 
     )
     setfile()
+    setinputvalue()
   }
+
 
 //----------------------- removeimage --------------------- // 
 const removeimage = ()=>{
   setfile()
   setpostinvalue()
+  
 }
  // ------------------ delete message ---------------------//
 const deleteitem = async (id)=>{
@@ -142,7 +155,7 @@ const deleteitem = async (id)=>{
     setdropdown(null)
     getspacificuser()
   } catch (error) {
-    consoel.log("delet error",error)
+    console.log("delet error",error)
   }
 }
 const expandlist = (id)=>{
@@ -153,6 +166,59 @@ const expandlist = (id)=>{
   }
 
 }
+
+/////////////////////////////////////////////   AUDIO RECODING /////////////////////////////
+
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef(null);
+  const audioChunks = useRef([]);
+  console.log("audioChunks",audioChunks)
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+  
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunks.current = [];
+  
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          audioChunks.current.push(e.data);
+        }
+      };
+  
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+  
+        setAudioUrl(audioUrl);
+  
+        // Update postinvalue with recorded audio
+        setpostinvalue((prev) => ({
+          ...prev,
+          receivernumber: userid?.id,
+          files: new File([audioBlob], 'audio.wav', { type: 'audio/wav' }),
+        }));
+      };
+  
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (err) {
+      console.error('Error accessing microphone:', err);
+    }
+  };
+  
+  const stopRecording = () => {
+    mediaRecorderRef.current?.stop();
+    setIsRecording(false);
+    sendmessage()
+  };
+useEffect(()=>{
+ 
+},[audioChunks])
+console.log("postinvalue in audio",audioUrl)
   return (
     <div
       style={{ backgroundImage: `url(${background})` }}
@@ -161,19 +227,19 @@ const expandlist = (id)=>{
       <div className="bg-slate-200 h-16 flex items-center justify-between cursor-pointer">
         <div className="flex items-center   ml-3">
           <div className="w-14 h-14 rounded-full overflow-hidden">
-            <img
+          <img
               src={
-                messagess.reciverid
-                  ? messagess?.reciverid.profileimage.profileimage
+                users?.profileimage
+                  ? users?.profileimage.profileimage || users?.profileimage
                   : profileimage
               }
               alt="profile image"
             />
           </div>
           <div className="ml-2">
-            <h1>{messagess?.reciverid?.name}</h1>
+            <h1>{contact?.find((item)=>item.profileimage._id == userid.id)?.name || null}</h1>
             <p className="text-gray-500 text-xs">
-              {messagess?.reciverid?.number}
+              {users?.number}
             </p>
           </div>
         </div>
@@ -249,9 +315,9 @@ const expandlist = (id)=>{
       </div>
 
             
-      <div className="absolute bottom-0 h-14 bg-slate-200 w-full">
-      {file && <span className=" w-full absolute bottom-full z-50 group h-80 overflow-y-scroll">
-            {file && <div>
+      <div className="absolute bottom-0 h-14 bg-slate-200 w-full z-50">
+      {file && <span className=" w-full absolute bottom-full z-50 group h-96 overflow-y-auto">
+            {file && <div className="">
               <div className="controls absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <button className="group-hover:p-3 rounded-full group-hover:bg-slate-500" onClick={removeimage}><RxCross1 className="text-4xl font-extrabold text-white"/></button>
           </div>
@@ -327,32 +393,37 @@ const expandlist = (id)=>{
           )}
         </span>
 
-        <div className="flex w-full mx-10 p-2 rounded-lg bg-white ">
-          <PiStickerBold className="text-2xl text-gray-500 cursor-pointer" />
-          <input
-            type="text"
-            // onFocus={()=>{setFocusing(true)}}
-            // onBlur={()=>setFocusing(false)}
-            className="mx-5 w-full outline-none"
-            placeholder="Type a message"
-            onChange={posttextmessage}
-            value={postinvalue?.message}
-          />
-        </div>
+        {
+          isRecording ? ("start recording ....."):(<div className="flex w-full mx-10 p-2 rounded-lg bg-white ">
+            <PiStickerBold className="text-2xl text-gray-500 cursor-pointer" />
+            <input
+              type="text"
+              // onFocus={()=>{setFocusing(true)}}
+              // onBlur={()=>setFocusing(false)}
+              className="mx-5 w-full outline-none"
+              placeholder="Type a message"
+              onChange={posttextmessage}
+              value={postinvalue?.message}
+            />
+          </div>)
+        }
         <div>
           <input
             type="file"
             className="hidden"
             onChange={uploadfile}
           />
-          {!focusing ? (
+          {inputvalu || file ? (
             <button onClick={messagesending} >
               <LuSendHorizontal className="text-2xl text-gray-500 cursor-pointer" />
             </button>
           ) : (
-            <button >
-              <IoMdMic className="text-2xl text-gray-500 cursor-pointer" />
-            </button>
+            // <button >
+            //   <IoMdMic className="text-2xl text-gray-500 cursor-pointer" />
+            // </button>
+            <button onClick={isRecording ? stopRecording : startRecording}>
+        {isRecording ? (<CgRecord className="text-2xl text-gray-500 cursor-pointer"/>) : ( <IoMdMic className="text-2xl text-gray-500 cursor-pointer" />)}
+    </button>
           )}
         </div>
        </div>
@@ -360,18 +431,18 @@ const expandlist = (id)=>{
       {/* ------dispaly user messages ------- */}
 
       <div className="overflow-y-scroll h-5/6 pb-5 messages-container">
-      {messagess?.message?.map((item) => (
+      {messagess?.map((item) => (
   <div
     className={`flex ${
-      item?.sendernumber == user.number ? "justify-end" : "justify-start"
+      item?.senderid == user._id ? "justify-end" : "justify-start"
     } relative`}
   >
     <div
       className={`${
-        item?.sendernumber == user.number
+        item?.senderid == user._id
           ? "bg-yellow-100"
           : "bg-white"
-      } min-w-32 w-fit p-5 m-2 h-auto rounded-lg`}
+      } min-w-32 max-w-96 p-2 m-2 h-auto rounded-lg`}
     >
       <button onClick={()=>expandlist(item._id)} className="float-end p-2"><FaChevronDown/></button>
       {

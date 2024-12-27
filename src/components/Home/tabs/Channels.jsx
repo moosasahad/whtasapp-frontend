@@ -7,7 +7,7 @@ import { Product } from '../../Component/Productcontext';
 
 function Channels({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
-    const {setgroupuserid} = useContext(Product)
+    const {setgroupuserid,setusesrid} = useContext(Product)
     const {groups} = useContext(groupcontextsender)
     console.log("groups",groups)
   return (
@@ -40,7 +40,7 @@ function Channels({setTabs}) {
       <div>
           {
             groups?.map((item)=>(
-              <div className='flex items-center gap-4 border-b-2 cursor-pointer' onClick={()=>setgroupuserid(item._id)}>
+              <div className='flex items-center gap-4 border-b-2 cursor-pointer' onClick={()=>setusesrid({id:item._id,page:"group"})}>
                 <img 
                 src={item.groupImage} 
                 alt="" 

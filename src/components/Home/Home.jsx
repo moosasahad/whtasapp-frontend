@@ -22,11 +22,16 @@ import Spacificgroup from './Spacificgroup'
 
 function Home() {
   const [tabs,setTabs] = useState('Chat')
-  const {userid,groupuserid,setgroupuserid} = useContext(Product)
+  const {userid,groupuserid,setgroupuserid,setusesrid} = useContext(Product)
   // const value = useContext(Product)
   // const [contact,Setcontact]=useState('')
   // console.log("tabs",tabs)
- 
+ if(groupuserid){
+  setusesrid(null)
+ }else if(userid){
+  setgroupuserid(null)
+
+ }
   
   return (
     <div className='bg-slate-100 flex h-screen'>
@@ -73,10 +78,7 @@ function Home() {
      
      </div>
      <div className='relative w-full bg-slate-200 '>
-      { userid && (<Spacificuser userid={userid}/>)}
-      {groupuserid && (<Spacificgroup setgroupuserid={setgroupuserid}/>)}
-     {/* {userid &&( <Spacificuser userid={userid}/>) ( */}
-      {!userid && !groupuserid && (
+      { userid.page == "chat" ?(<Spacificuser userid={userid}/>):userid.page=="group" ? (<Spacificgroup setgroupuserid={setgroupuserid}/>):(
         <div className='relative bg-slate-200 flex justify-center items-center h-screen w-full'>
         <div>
         <div>
@@ -85,24 +87,17 @@ function Home() {
         <h6 className='font-extralight font-sans text-sm text-gray-600 text-center mt-4'>Make calls, share your screen and get a faster experience when you download the Windows app.</h6>
         <h6  className='bg-green-600 text-white p-2 rounded-full w-52 mx-auto text-center mt-4'>Get from Microsoft Store</h6>
         </div>
-        {/* {value} sddsd */}
-        {/* <h1 className="flex justify-center items-center relative -bottom-32">
+         <h1 className="flex justify-center items-center relative mt-32">
                     <span>
                       <CiLock />
                     </span>
                   
                     Your personal messages are end-to-end encrypted
-                  </h1> */}
+                  </h1>
         </div>
-            </div>
+        </div>
       )}
-     {/* )} */}
-     </div>
-     {/* ------spacific user profile info -------- */}
-
-     {/* <div className=" 2xl:hidden bg-blue-500 p-4">
-  I am visible only on screens smaller than `md` or larger than `lg`.
-</div> */}
+            </div>
     </div>
   )
 }

@@ -5,15 +5,15 @@ import { Input } from 'postcss';
 export const Product = createContext();
 function Productcontext({children}) {
     const[state,setState]=useState(null)
-    const[userid,setusesrid]=useState('')
+    const[userid,setusesrid]=useState({id:"",page:"",number:"",})
   const [groupuserid,setgroupuserid]=useState(null)
 
-    // console.log("userid---",userid);
+    console.log("userid---",userid);
     const [login,setlogin]=useState(true)
     const [tabs,settabs]=useState('page-1')
     const [messagess,setmessages]=useState([])
     const [file,setfile]=useState()
-
+console.log("userid,userid,userid=======userid",userid)
 
     
     
@@ -23,8 +23,8 @@ function Productcontext({children}) {
       const getmessager =async ()=>{
         try {
           const res =await axiosPrivate.get("/getallmessagers")
-          console.log("getmessager",res?.data.data.findeddata)
-            setState(res?.data.data.findeddata)
+          console.log("getmessager",res?.data.data)
+            setState(res?.data.data)
           
         } catch (error) {
           console.log("error",error)
@@ -32,6 +32,7 @@ function Productcontext({children}) {
       }
       getmessager()
     },[])
+    console.log("state in productcontext",state)
 
 
   
@@ -42,10 +43,11 @@ function Productcontext({children}) {
 
     const sendmessage =async ()=>{
       const formData = new FormData();
-      formData.append("message", inputfild?.message);
+      formData.append("message", inputfild?.message ? (inputfild?.message):(""));
       formData.append("files", inputfild?.files);
       formData.append("receivernumber", inputfild?.receivernumber);
       formData.append("receiverid", inputfild?.receiverid);
+console.log("fomrdata",formData);
 
       try {
         const res = await axiosPrivate.post("/sendmessage",formData)
@@ -65,9 +67,9 @@ function Productcontext({children}) {
     const getspacificuser =async ()=>{
       try {
         console.log("sdfghj234567890==///",userid)
-        const res =await axiosPrivate.get(`/getmessaeg/${userid}`)
-        console.log("get spacific messager",res?.data.data.messages)          
-        setmessages(res?.data.data.messages)
+        const res =await axiosPrivate.get(`/getmessaeg/${userid.id}`)
+        console.log("get spacific messager",res?.data.data)          
+        setmessages(res?.data.data)
       } catch (error) {
         console.log("error",error)
       }
