@@ -1,5 +1,5 @@
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
-import { FaVideo } from "react-icons/fa6";
+import { FaChevronUp, FaVideo } from "react-icons/fa6";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoSearchSharp } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -27,6 +27,15 @@ import { RxCross1 } from "react-icons/rx";
 import { FaChevronDown } from "react-icons/fa";
 import { contactcontext } from "../Component/Contact";
 import { CgRecord } from "react-icons/cg";
+import { PiWarningCircle } from "react-icons/pi";
+import { FaRegStar } from "react-icons/fa";
+import { IoCheckmarkDoneOutline } from "react-icons/io5";
+
+
+
+
+
+
 
 
 
@@ -42,6 +51,8 @@ function Spacificuser({ userid }) {
   const [focusing, setFocusing] = useState("");
   const {state:user} = useContext(usercontext)
   const [users,setuser] = useState("")
+  const [details,sestdetails] = useState(false)
+  const [infotab,setinfotab] = useState("overview")
   const [postinvalue,setpostinvalue] = useState({
     receivernumber:users?.number,
     message:"",
@@ -158,6 +169,26 @@ const deleteitem = async (id)=>{
     console.log("delet error",error)
   }
 }
+////////////////// STAR MESSAGE ///////////////////////////
+const strarmesssage =async (id)=>{
+ try {
+    const res = await axiosPrivate.patch(`/starmessages/${id}`)
+    console.log("res star message", res.data)
+    setdropdown(null)
+    getspacificuser()
+  } catch (error) {
+    console.log("star message error",error)
+  }
+}
+
+//////////////////////  FINDE STARD MESSAGE ////////////////////
+
+const startdmessage = messagess.filter((item)=>item.star)
+console.log("startdmessage",startdmessage)
+
+
+
+
 const expandlist = (id)=>{
   if(id == dropdown){
     setdropdown(null)
@@ -173,7 +204,6 @@ const expandlist = (id)=>{
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunks = useRef([]);
-  console.log("audioChunks",audioChunks)
 
   const startRecording = async () => {
     try {
@@ -212,19 +242,24 @@ const expandlist = (id)=>{
   
   const stopRecording = () => {
     mediaRecorderRef.current?.stop();
-    setIsRecording(false);
     sendmessage()
+    setIsRecording(false);
+    // messagesending()
   };
 useEffect(()=>{
  
 },[audioChunks])
 console.log("postinvalue in audio",audioUrl)
+const outsidehandil = () =>{
+  sestdetails(false)
+}
   return (
     <div
       style={{ backgroundImage: `url(${background})` }}
       className="bg-slate-200 h-screen"
+      
     >
-      <div className="bg-slate-200 h-16 flex items-center justify-between cursor-pointer">
+      <div className="bg-slate-200 h-16 flex items-center justify-between cursor-pointer" onClick={()=>sestdetails(!details)}>
         <div className="flex items-center   ml-3">
           <div className="w-14 h-14 rounded-full overflow-hidden">
           <img
@@ -313,6 +348,118 @@ console.log("postinvalue in audio",audioUrl)
           </span>
         </div>
       </div>
+
+      {/* /////////////////////////  PROFILE DETAILS PAGE  //////////// */}
+
+      {
+       details ? (
+        <div className="w-96   bg-slate-200 border-2 border-slate-300 max-h-screen absolute top-0 flex z-50 ">
+          <div className="w-36 h-auto bg-slate-300 p-2 ">
+            <div className={`flex items-center gap-3 p-2 border-b-2 border-slate-400 ${infotab == "overview" ? "bg-slate-400":null} hover:bg-slate-400 cursor-pointer`} onClick={()=>setinfotab("overview")}> <PiWarningCircle/> Overview</div>
+            <div className={`flex items-center gap-3 p-2 border-b-2 border-slate-400 ${infotab == "star" ? "bg-slate-400":null} hover:bg-slate-400 cursor-pointer`} onClick={()=>setinfotab("star")}> <FaRegStar/> Stred </div>
+
+          </div>
+          <div className="w-full flex flex-col gap-1 items-center pt-8">
+           {infotab == "overview" && ( <><div className="w-32 h-32 border-2 border-slate-300 rounded-full overflow-hidden">
+            <img
+            className="w-32 h-32 rounded-full "
+              src={
+                users?.profileimage
+                  ? users?.profileimage.profileimage || users?.profileimage
+                  : profileimage
+              }
+              alt="profile image"
+            />
+            </div>
+            <h1 className="text-2xl mt-8">{contact?.find((item)=>item.profileimage._id == userid.id)?.name || null}</h1>
+            <h1>{findmessagesender?.about}</h1>
+            <h1>{users?.number}</h1>
+
+            <div className="flex">
+              <div className="w-24 bg-gray-400 flex flex-col justify-center items-center p-2 rounded-md m-2 gap-2 cursor-pointer">
+              <FaVideo />
+
+
+                <h1>Video</h1>
+              </div>
+              <div className="w-24 bg-gray-400 flex flex-col justify-center items-center p-2 rounded-md m-2 gap-2 cursor-pointer">
+              <FaPhoneAlt />
+                <h1>Voice</h1>
+                </div>
+
+            </div></>)}
+            {infotab == "star" && (<div className="w-full h-full overflow-y-auto pb-14">
+              {startdmessage?.map((item) => (
+  <div
+    className={`flex ${
+      item?.senderid == user._id ? "justify-end" : "justify-start"
+    } relative`}
+  >
+    <div
+      className={`${
+        item?.senderid == user._id
+          ? "bg-yellow-100"
+          : "bg-white"
+      } min-w-32 max-w-96 p-2 m-2 h-auto rounded-lg`}
+    >
+      <button onClick={()=>expandlist(item._id)} className="float-end p-2">{dropdown == item._id ? (<FaChevronUp/>):(<FaChevronDown/>)}</button>
+      {
+        dropdown == item._id && <div className={`w-auto bg-white absolute z-50 ${item?.senderid == user._id ?"right-2":"left-2"}  top-12 flex flex-col`}>
+        <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start" onClick={()=>deleteitem(item._id)}>Delete</button>
+        {/* <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start">Forwoard</button> */}
+        <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start" onClick={()=>strarmesssage(item._id)}>star</button>
+
+
+      </div>
+      }
+      <h1>{item?.text}</h1>
+      
+      <div>
+      {item.image && (
+        <div className="image-container group relative w-full overflow-hidden">
+          <img
+            src={item.image}
+            alt="Example"
+            ref={imageRef}
+            className="w-full h-auto transition-all duration-300 group-hover:blur-sm"
+          />
+          <div className="controls absolute top-0 left-0 w-full h-full  flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              onClick={openFullscreen}
+              className="bg-blue-500 text-white px-4 py-2 rounded m-2"
+            >
+              <MdFullscreen size={24} />
+            </button>
+            <a href={item.image} download>
+              <button className="bg-green-500 text-white px-4 py-2 rounded m-2">
+                <MdDownload size={24} />
+              </button>
+            </a>
+          </div>
+        </div>
+      )}
+
+        {item.audio && <audio controls src={item.audio} className="w-56"></audio>}
+        {item.video && <video controls src={item.video}></video>}
+      </div>
+      <h1 className="text-xs flex justify-end mt-2">
+      {item.star ? (<FaRegStar/>):(null)}
+      <IoCheckmarkDoneOutline/>
+        {new Date(item.date).toLocaleDateString()}
+        
+      </h1>
+
+    </div>
+    
+
+  </div>
+))}
+ 
+            </div>) }
+          </div>
+      </div>
+       ) :(null)
+      }
 
             
       <div className="absolute bottom-0 h-14 bg-slate-200 w-full z-50">
@@ -430,7 +577,7 @@ console.log("postinvalue in audio",audioUrl)
       </div>
       {/* ------dispaly user messages ------- */}
 
-      <div className="overflow-y-scroll h-5/6 pb-5 messages-container">
+      <div className="overflow-y-scroll h-5/6 pb-5 messages-container" onClick={outsidehandil}>
       {messagess?.map((item) => (
   <div
     className={`flex ${
@@ -444,12 +591,12 @@ console.log("postinvalue in audio",audioUrl)
           : "bg-white"
       } min-w-32 max-w-96 p-2 m-2 h-auto rounded-lg`}
     >
-      <button onClick={()=>expandlist(item._id)} className="float-end p-2"><FaChevronDown/></button>
+      <button onClick={()=>expandlist(item._id)} className="float-end p-2">{dropdown == item._id ? (<FaChevronUp/>):(<FaChevronDown/>)}</button>
       {
-        dropdown == item._id && <div className="w-auto bg-white absolute z-50 right-2 top-12 flex flex-col">
+        dropdown == item._id && <div className={`w-auto bg-white absolute z-50 ${item?.senderid == user._id ?"right-2":"left-2"}  top-12 flex flex-col`}>
         <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start" onClick={()=>deleteitem(item._id)}>Delete</button>
-        <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start">Forwoard</button>
-        <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start">star</button>
+        {/* <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start">Forwoard</button> */}
+        <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start" onClick={()=>strarmesssage(item._id)}>star</button>
 
 
       </div>
@@ -485,7 +632,10 @@ console.log("postinvalue in audio",audioUrl)
         {item.video && <video controls src={item.video}></video>}
       </div>
       <h1 className="text-xs flex justify-end mt-2">
+      {item.star ? (<FaRegStar/>):(null)}
+      <IoCheckmarkDoneOutline/>
         {new Date(item.date).toLocaleDateString()}
+        
       </h1>
 
     </div>

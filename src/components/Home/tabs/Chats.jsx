@@ -6,6 +6,7 @@ import { Product } from '../../Component/Productcontext';
 import { useEffect } from 'react';
 import profile from '../../../Images/profile image.png'
 import { contactcontext } from '../../Component/Contact';
+import { axiosPrivate } from '../../../Axiosinstens';
 
 function Chats({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
@@ -18,6 +19,23 @@ function Chats({setTabs}) {
       localStorage.removeItem("user")
     }
     console.log("state",state)
+
+//////////////////////////////////////////////////////////
+const [findeuser,setfindedser]=useState([])
+const findemessagers =async ()=>{
+  try{
+    const res = await axiosPrivate.get("/getChatData")
+    console.log("userfinding res",res.data.dat)
+    setfindedser(res.data.data)
+  }catch(error){
+    consoel.log("userfindin error",error)
+  }
+}
+useEffect(()=>{
+  findemessagers()
+
+},[])
+console.log("findeuser/findeuser",findeuser)
   return (
     <div>
       <div className='flex justify-between mt-3 '>
@@ -77,7 +95,7 @@ function Chats({setTabs}) {
       <div className='overflow-y-auto'
       style={{ scrollbarWidth: 'thin',height:'480px' }}
       >
-        {state?.map((value)=>(
+        {findeuser.users?.map((value)=>(
             <div key={value._id} className='flex items-center my-5 border-b-2 p-2 cursor-pointer' onClick={()=>setusesrid({id:value._id,page:"chat",number:value.number})}>
                 <div className='w-14 h-14 rounded-full overflow-hidden  mr-3 '>
                     <img
@@ -88,6 +106,21 @@ function Chats({setTabs}) {
                     </div>
                 <div>
                     <h1 className='text-xl'>{ contacts.find((item)=>item.profileimage._id == value._id)?.name || null}</h1>
+                    <p className='text-gray-500 font-sans'>{value?.number}</p>
+                </div>
+            </div>
+        ))}
+        {findeuser.groups?.map((value)=>(
+            <div key={value._id} className='flex items-center my-5 border-b-2 p-2 cursor-pointer' onClick={()=>setusesrid({id:value._id,page:"group",number:value.number})}>
+                <div className='w-14 h-14 rounded-full overflow-hidden  mr-3 '>
+                    <img
+                     src={value.groupImage ? value.groupImage:profile}
+                     alt="user profile photo"
+                     className="w-full h-full object-cover"
+                     />
+                    </div>
+                <div>
+                    <h1 className='text-xl'>{ value.groupName}</h1>
                     <p className='text-gray-500 font-sans'>{value?.number}</p>
                 </div>
             </div>

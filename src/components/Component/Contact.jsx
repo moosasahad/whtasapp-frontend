@@ -12,7 +12,6 @@ function Contact({children}) {
             const res = await axiosPrivate.get("/getallcontatc")
             console.log("all contatcs",res.data)
             setState(res.data.data)
-            setsearcheddata(res.data)
         } catch (error) {
             console.log("contac error",error)
         }
@@ -24,6 +23,7 @@ function Contact({children}) {
     const Searchcontatc =async ()=>{
         try {
             const res = await axiosPrivate.get(`/searchcontatcs?query=${input}`)
+            setsearcheddata(res.data)
             console.log("Searchcontatc",res.data)
         } catch (error) {
             console.log("Searchcontatc.error",error)

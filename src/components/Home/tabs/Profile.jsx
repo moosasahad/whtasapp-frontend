@@ -41,9 +41,8 @@ function Profile() {
       type="file"
       className="hidden"
       onChange={(e) => {
-        // Handle file upload logic here
         const file = e.target.files[0];
-        console.log("Selected file:", file);
+        console.log("  file:", file);
       }}
     />
   </label>

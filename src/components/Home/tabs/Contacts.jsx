@@ -67,22 +67,22 @@ function Contacts({setTabs}) {
        <div>
         {input ? (
           <div>
+            <h1>{sercheddata.length==0 ? "number not fount":null}</h1>
             {
-            sercheddata.data?.map((value)=>(
-              <div className='h-auto m-2 bg-slate-100 border-b-2 border-gray-300 cursor-pointer flex items-center' onClick={()=>setusesrid({id:value?.profileimage._id,page:"chat"})} >
-               <div className='w-20 h-20 rounded-full overflow-hidden mr-5'>
-               <img src={value?.profileimage.profileimage} alt="user profile"
-                className='w-20 h-20 object-cover rounded-full'
-                />
-               </div>
-               <div>
-               <h1 className='text-gray-500 text-xl'>{value.name}</h1>
-               <h5 className='text-gray-400 text-sm'>{value.number}</h5>
-               </div>
+            sercheddata?.map((value)=>(
+              <div className='h-auto m-2 bg-slate-100 border-b-2 p-3 border-gray-300 cursor-pointer flex items-center' onClick={()=>setusesrid({id:value.profileimage._id, page:"chat"})} >
+              <div className='w-16 h-16  overflow-hidden mr-8'>
+              <img src={value?.profileimage.profileimage} alt="profile image"
+               className='w-16 h-16 object-cover rounded-full'
+               />
               </div>
+              <div>
+              <h1 className='text-gray-500 text-xl'>{value.name}</h1>
+              <h5 className='text-gray-400 text-sm'>{value.number}</h5>
+              </div>
+             </div>
             ))
           }
-  kdsjjkhfjkshf
           </div>
         ):(
           <div className='overflow-y-auto h-96'>
@@ -98,6 +98,7 @@ function Contacts({setTabs}) {
                <h1 className='text-gray-500 text-xl'>{value.name}</h1>
                <h5 className='text-gray-400 text-sm'>{value.number}</h5>
                </div>
+               
               </div>
             ))
           }
