@@ -5,6 +5,7 @@ import { FaPhone } from "react-icons/fa6";
 import { useFormik } from 'formik';
 import { contactsave } from '../../Form_validation/contactsaveSchema';
 import { axiosPrivate } from '../../../Axiosinstens';
+import { toast } from 'react-toastify';
 
 
 function NewContacts({setTabs}) {
@@ -21,8 +22,16 @@ function NewContacts({setTabs}) {
         try {
                   const res = await axiosPrivate.post("/savecontact",{name,number:phonenumber});
                   console.log("res post contact", res.data.response);
+                  toast.success("Contact saved", {
+                    style: {
+                        width: "250px",
+                        height: "10px",
+                       
+                      },
+                  });
                 } catch (error) {
                   setresponese(error?.response.data.message)
+                  
 
                   console.log("Error in contact post", error.response.data.message);
                 }

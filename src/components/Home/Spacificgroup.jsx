@@ -32,14 +32,19 @@ import { contactcontext } from "../Component/Contact";
 import { ImUserPlus } from "react-icons/im";
 import { toast } from "react-toastify";
 
-
 function Spacificgroup() {
   const [focus, setFocus] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [inputvalu, setinputvalue] = useState("");
   const [pop, setpop] = useState(false);
-  const { groups, sendmessageongroup, postinvalue, setpostinvalue, getgrups,spacificgroup } =
-    useContext(groupcontextsender);
+  const {
+    groups,
+    sendmessageongroup,
+    postinvalue,
+    setpostinvalue,
+    getgrups,
+    spacificgroup,
+  } = useContext(groupcontextsender);
   const { getspacificuser, groupuserid, userid } = useContext(Product);
   const [userids, setuserid] = useState(null);
   const [focusing, setFocusing] = useState("");
@@ -48,13 +53,13 @@ function Spacificgroup() {
   const [dropdown, setdropdown] = useState(false);
   const [details, sestdetails] = useState(false);
   const [infotab, setinfotab] = useState("overview");
-  const {state,input,setinput,sercheddata} = useContext(contactcontext)
-  const [addgroup,setaddgroup] = useState(true)
+  const { state, input, setinput, sercheddata } = useContext(contactcontext);
+  const [addgroup, setaddgroup] = useState(true);
 
   //////////////// FINDING SPACIFIC GROUP //////////////////////
   //   const [spacificgroup,setspacificgroup]= useState([])
-//   const spacificgroup = groups?.find((item) => item._id == userid.id);
-console.log("spacificgroup -- spacificgroup",spacificgroup)
+  //   const spacificgroup = groups?.find((item) => item._id == userid.id);
+  console.log("spacificgroup -- spacificgroup", spacificgroup);
   // useEffect(()=>{
   //   setspacificgroup(spacificgroup)
 
@@ -162,11 +167,10 @@ console.log("spacificgroup -- spacificgroup",spacificgroup)
 
   ////////////////// FNDING ////////////
 
-  const startdmessage = spacificgroup?.messages?.filter((item)=>item.star)
-console.log("startdmessage",startdmessage)
+  const startdmessage = spacificgroup?.messages?.filter((item) => item.star);
+  console.log("startdmessage", startdmessage);
 
-///////////////////////    GROUPE MEMBERS  /////////////////////////////
-
+  ///////////////////////    GROUPE MEMBERS  /////////////////////////////
 
   ////////////////////////////////////////////   AUDIO RECODING /////////////////////////////
 
@@ -176,35 +180,34 @@ console.log("startdmessage",startdmessage)
   const audioChunks = useRef([]);
 
   const startRecording = async () => {
-    
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mediaRecorder = new MediaRecorder(stream);
 
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunks.current = [];
+    mediaRecorderRef.current = mediaRecorder;
+    audioChunks.current = [];
 
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          audioChunks.current.push(e.data);
-        }
-      };
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) {
+        audioChunks.current.push(e.data);
+      }
+    };
 
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
-        const audioUrl = URL.createObjectURL(audioBlob);
+    mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
+      const audioUrl = URL.createObjectURL(audioBlob);
 
-        setAudioUrl(audioUrl);
+      setAudioUrl(audioUrl);
 
-        // Update postinvalue with recorded audio
-        setpostinvalue((prev) => ({
-          ...prev,
-          groupid: spacificgroup?._id,
-          files: new File([audioBlob], "audio.wav", { type: "audio/wav" }),
-        }));
-      };
+      // Update postinvalue with recorded audio
+      setpostinvalue((prev) => ({
+        ...prev,
+        groupid: spacificgroup?._id,
+        files: new File([audioBlob], "audio.wav", { type: "audio/wav" }),
+      }));
+    };
 
-      mediaRecorder.start();
-      setIsRecording(true);
+    mediaRecorder.start();
+    setIsRecording(true);
   };
 
   const stopRecording = () => {
@@ -219,29 +222,28 @@ console.log("startdmessage",startdmessage)
     sestdetails(false);
   };
 
-  console.log("contacts == contacts ",state)
+  console.log("contacts == contacts ", state);
 
   ///////////////////////////////////////  ADD MEMBERSE IN GROUP //////////////////////////
 
-  const admebersingroup = async (id) =>{
-    console.log("groupuser id",id)
-    
-    try{
-        const res = await axiosPrivate.patch(`addmembersingroup/${id}/${spacificgroup?._id}`)
-        console.log("res.admebersingroup",res.data)
-        toast.success("added", {
-            style: {
-                width: "150px",
-                height: "10px",
-               
-              },
-          });
-        
-    }catch(error){
-        console.log("admembers error",error)
-    }
+  const admebersingroup = async (id) => {
+    console.log("groupuser id", id);
 
-  }
+    try {
+      const res = await axiosPrivate.patch(
+        `addmembersingroup/${id}/${spacificgroup?._id}`
+      );
+      console.log("res.admebersingroup", res.data);
+      toast.success("added", {
+        style: {
+          width: "150px",
+          height: "10px",
+        },
+      });
+    } catch (error) {
+      console.log("admembers error", error);
+    }
+  };
   return (
     <div
       style={{ backgroundImage: `url(${background})` }}
@@ -369,10 +371,7 @@ console.log("startdmessage",startdmessage)
             </div>
           </div>
           <div className="w-full flex flex-col gap-1 items-center pt-8">
-
-
             {/* /////////////////////////////// OVERVIEW //////////////////// */}
-
 
             {infotab == "overview" && (
               <>
@@ -502,74 +501,140 @@ console.log("startdmessage",startdmessage)
             )}
             {/* /////////////////////// DISPLAY MEMBERS //////////////////////////// */}
 
-            {infotab == "members" && (<div className="w-full h-full overflow-y-auto ">
-                <h1 className="text-center text-2xl "> 
-                Members
-
-                </h1>
+            {infotab == "members" && (
+              <div className="w-full h-full overflow-y-auto ">
+                <h1 className="text-center text-2xl ">Members</h1>
                 {addgroup ? (
-                    <div className="flex justify-center mt-5 border-b border-gray-400 p-4 cursor-pointer" onClick={()=>setaddgroup(false)}>
-                   <ImUserPlus className="text-2xl text-gray-500 mr-12"/> <h1>Add membres</h1>
-                </div>
-                ):(
-                    <div className="mt-5 border-b border-gray-400 p-4 cursor-pointer">
-                   <div className="flex justify-center">
-                   <input type="text"
-                   onChange={(e)=>setinput(e.target.value)}
-                   className="outline-none bg-slate-300 rounded-md"
-                   /> 
-                   <button className="" onClick={()=>{setaddgroup(true),setinput()}}>
-                    <RxCross2  className="text-2xl text-green-500"/>
-                   </button>
-                   </div>
-                   <div>
-                   </div>
-                </div>
+                  <div
+                    className="flex justify-center mt-5 border-b border-gray-400 p-4 cursor-pointer"
+                    onClick={() => setaddgroup(false)}
+                  >
+                    <ImUserPlus className="text-2xl text-gray-500 mr-12" />{" "}
+                    <h1>Add membres</h1>
+                  </div>
+                ) : (
+                  <div className="mt-5 border-b border-gray-400 p-4 cursor-pointer">
+                    <div className="flex justify-center">
+                      <input
+                        type="text"
+                        onChange={(e) => setinput(e.target.value)}
+                        className="outline-none bg-slate-300 rounded-md"
+                      />
+                      <button
+                        className=""
+                        onClick={() => {
+                          setaddgroup(true), setinput();
+                        }}
+                      >
+                        <RxCross2 className="text-2xl text-green-500" />
+                      </button>
+                    </div>
+                    <div></div>
+                  </div>
                 )}
                 <div>
-                   
-                    {/* ///////////////////// ADD MEMBERS IN GROUP //////////////////////// */}
-        {input ? (
-          <div className='overflow-y-auto h-96'>
-            <h1>{sercheddata.length==0 ? "number not fount":null}</h1>
-            {
-            sercheddata?.map((value)=>(
-              <div className='flex items-center border-b border-gray-400 cursor-pointer' onClick={()=>admebersingroup(value.profileimage._id)}>
-              <div className='w-10 h-10 rounded-full overflow-hidden mr-auto ml-5'>
-              <img src={value?.profileimage.profileimage} alt="profile image"
-               className='w-10 h-10 rounded-full overflow-hidden'
-               />
-              </div>
-              <div className="mr-auto">
-              <h1 className='text-lg'>{value.name}</h1>
-              <h5 className='text-sm'>{value.number}</h5>
-              </div>
-             </div>
-            ))
-          }
-          </div>
-        ):(
-          <div className='overflow-y-auto h-96'>
-
-           {spacificgroup?.members.map((item)=>(
-                    <div className="flex justify-center items-center border-b border-gray-400 p-2">
-                      <div className="w-10 h-10 rounded-full overflow-hidden mr-auto ml-5">
-                        <img src={item.membersid?.profileimage} alt="profile image" className="w-10 h-10 rounded-full overflow-hidden" />
-                      </div>
-                      <div className="mr-auto">
-                        <h1 className="text-lg"> {state?.find((value) => value.number ==item.membersid?.number)?.name || (<h1 className="text-sm text-gray-400">{item.membersid?.name}</h1>)}</h1>
-                        <h1 className="text-sm">{item.membersid?.number}</h1>
-                      </div>
+                  {/* ///////////////////// ADD MEMBERS IN GROUP //////////////////////// */}
+                  {input ? (
+                    <div className="overflow-y-auto h-96">
+                      <h1>
+                        {sercheddata.length == 0 ? "number not fount" : null}
+                      </h1>
+                      {sercheddata?.map((value) => (
+                        <div
+                          className="flex items-center border-b border-gray-400 cursor-pointer"
+                          onClick={() =>
+                            admebersingroup(value.profileimage._id)
+                          }
+                        >
+                          <div className="w-10 h-10 rounded-full overflow-hidden mr-auto ml-5">
+                            <img
+                              src={value?.profileimage.profileimage}
+                              alt="profile image"
+                              className="w-10 h-10 rounded-full overflow-hidden"
+                            />
+                          </div>
+                          <div className="mr-auto">
+                            <h1 className="text-lg">{value.name}</h1>
+                            <h5 className="text-sm">{value.number}</h5>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                ))}
-               
-        </div>
-        )}
-       </div>
-                
+                  ) : (
+                    <div className="overflow-y-auto h-96">
+                      <div className="flex justify-center items-center border-b border-gray-400 p-2">
+                        <div className="w-10 h-10 rounded-full overflow-hidden mr-auto ml-5">
+                          <img
+                            src={spacificgroup?.admin.profileimage}
+                            alt="profile image"
+                            className="w-10 h-10 rounded-full overflow-hidden"
+                          />
+                        </div>
+                        <div className="mr-auto">
+                          <h1 className="text-lg">
+                            {state?.find(
+                              (value) =>
+                                value.number === spacificgroup?.admin.number
+                            ) ? (
+                              <>
+                                {
+                                  state.find(
+                                    (value) =>
+                                      value.number ===
+                                      spacificgroup?.admin.number
+                                  ).name
+                                }
+                                <span className="text-sm font-bold pl-3">
+                                  admin
+                                </span>
+                              </>
+                            ) : (
+                              <h1 className="text-sm text-gray-400">
+                                {spacificgroup?.admin.name}
+                                <span className="text-sm font-bold pl-3 text-black">
+                                  (admin)
+                                </span>
+                              </h1>
+                            )}
+                          </h1>
 
-               
-            </div>)}
+                          <h1 className="text-sm">
+                            {spacificgroup?.admin.number}
+                          </h1>
+                        </div>
+                      </div>
+                      {spacificgroup?.members.map((item) => (
+                        <div className="flex justify-center items-center border-b border-gray-400 p-2">
+                          <div className="w-10 h-10 rounded-full overflow-hidden mr-auto ml-5">
+                            <img
+                              src={item.membersid?.profileimage}
+                              alt="profile image"
+                              className="w-10 h-10 rounded-full overflow-hidden"
+                            />
+                          </div>
+                          <div className="mr-auto">
+                            <h1 className="text-lg">
+                              {" "}
+                              {state?.find(
+                                (value) =>
+                                  value.number == item.membersid?.number
+                              )?.name || (
+                                <h1 className="text-sm text-gray-400">
+                                  {item.membersid?.name}
+                                </h1>
+                              )}
+                            </h1>
+                            <h1 className="text-sm">
+                              {item.membersid?.number}
+                            </h1>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : null}
@@ -698,136 +763,149 @@ console.log("startdmessage",startdmessage)
           </div>
         </div>
       </div>
+
       {/* ------dispaly user messages ------- */}
 
-      <div className="overflow-y-scroll h-5/6 pb-5 messages-container" onClick={()=>sestdetails(false)}>
-      {spacificgroup?.messages?.map((item) => (
-  <div className="relative ">
-    <div
-      className={`flex ${
-        item?.sendernumber == user.number
-          ? "justify-end "
-          : "justify-start"
-      }`}
-    >
-      {/* Place the button on the left side */}
-      {item?.sendernumber == user.number && (
-       <div className=" flex justify-center">
-        {dropdown == item._id && (
-      <div className={`w-auto h-24 flex flex-col bg-white mt-auto`}>
-        <button
-          className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
-          onClick={() => deleteitem(item._id)}
-        >
-          Delete
-        </button>
-        <button
-          className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
-          onClick={() => strarmesssage(item._id)}
-        >
-          star
-        </button>
-      </div>
-    )}
-          <button onClick={()=>expandlist(item._id)} className="float-end p-2">{dropdown == item._id ? (<FaChevronUp/>):(<FaChevronDown/>)}</button>
-       </div>
-      )}
-      
-
       <div
-        className={`${
-          item?.sendernumber == user.number ? "bg-yellow-100" : "bg-white"
-        } min-w-32 w-fit p-2 m-2 h-auto rounded-lg`}
+        className="overflow-y-scroll h-5/6 pb-5 messages-container"
+        onClick={() => sestdetails(false)}
       >
-        <div className="flex justify-between">
-          {item?.sendernumber == user.number ? (
-            <h1 className="font-bold text-orange-300">You</h1>
-          ) : (
-            <div className="flex gap-2 items-center">
-              <img
-                src={item?.sender?.profileimage}
-                alt=""
-                className="w-8 h-8 rounded-full"
-              />
-              <h6 className="text-gray-500">
-                {state?.find(
-                  (value) => value.number == item?.sendernumber
-                )?.name || (
-                  <h1 className="text-md text-orange-300">
-                    {item?.sender?.name}
-                  </h1>
-                )}
-              </h6>
-            </div>
-          )}
-        </div>
-
-        <h1 className="max-w-xl break-words">{item?.text}</h1>
-
-        <div className="max-w-xl overflow-auto">
-          {item.image && (
-            <div className="image-container group relative w-full overflow-hidden">
-              <img
-                src={item.image}
-                alt="Example"
-                ref={imageRef}
-                className="w-full h-auto transition-all duration-300 group-hover:blur-sm"
-              />
-              <div className="controls absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button
-                  onClick={openFullscreen}
-                  className="bg-blue-500 text-white px-4 py-2 rounded m-2"
-                >
-                  <MdFullscreen size={24} />
-                </button>
-                <a href={item.image} download>
-                  <button className="bg-green-500 text-white px-4 py-2 rounded m-2">
-                    <MdDownload size={24} />
+        {spacificgroup?.messages?.map((item) => (
+          <div className="relative ">
+            <div
+              className={`flex ${
+                item?.sendernumber == user.number
+                  ? "justify-end group"
+                  : "justify-start group"
+              }`}
+            >
+              {item?.sendernumber == user.number && (
+                <div className=" flex justify-center opacity-0 group-hover:opacity-100 h-auto">
+                  {dropdown == item._id && (
+                    <div
+                      className={`w-auto h-24 flex flex-col bg-white mt-auto m-auto`}
+                    >
+                      <button
+                        className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
+                        onClick={() => deleteitem(item._id)}
+                      >
+                        Delete
+                      </button>
+                      <button
+                        className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
+                        onClick={() => strarmesssage(item._id)}
+                      >
+                        star
+                      </button>
+                    </div>
+                  )}
+                  <button
+                    onClick={() => expandlist(item._id)}
+                    className="float-end p-2"
+                  >
+                    {dropdown == item._id ? <FaChevronUp /> : <FaChevronDown />}
                   </button>
-                </a>
+                </div>
+              )}
+
+              <div
+                className={`${
+                  item?.sendernumber == user.number
+                    ? "bg-yellow-100"
+                    : "bg-white"
+                } min-w-32 w-fit p-2 m-2 h-auto rounded-lg`}
+              >
+                <div className="flex justify-between">
+                  {item?.sendernumber == user.number ? (
+                    <h1 className="font-bold text-orange-300">You</h1>
+                  ) : (
+                    <div className="flex gap-2 items-center">
+                      <img
+                        src={item?.sender?.profileimage}
+                        alt=""
+                        className="w-8 h-8 rounded-full"
+                      />
+                      <h6 className="text-gray-500">
+                        {state?.find(
+                          (value) => value.number == item?.sendernumber
+                        )?.name || (
+                          <h1 className="text-md text-orange-300">
+                            {item?.sender?.name}
+                          </h1>
+                        )}
+                      </h6>
+                    </div>
+                  )}
+                </div>
+
+                <h1 className="max-w-xl break-words">{item?.text}</h1>
+
+                <div className="max-w-xl overflow-auto">
+                  {item.image && (
+                    <div className="image-container group relative w-full overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt="Example"
+                        ref={imageRef}
+                        className="w-full h-auto transition-all duration-300 group-hover:blur-sm"
+                      />
+                      <div className="controls absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button
+                          onClick={openFullscreen}
+                          className="bg-blue-500 text-white px-4 py-2 rounded m-2"
+                        >
+                          <MdFullscreen size={24} />
+                        </button>
+                        <a href={item.image} download>
+                          <button className="bg-green-500 text-white px-4 py-2 rounded m-2">
+                            <MdDownload size={24} />
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                  )}
+
+                  {item.audio && <audio controls src={item.audio}></audio>}
+                  {item.video && <video controls src={item.video}></video>}
+                </div>
+                <h1 className="text-xs flex justify-end mt-2">
+                  {item.star ? <FaRegStar /> : null}
+                  <IoCheckmarkDoneOutline />
+                  {new Date(item.date).toLocaleDateString()}
+                </h1>
               </div>
+
+              {item?.sendernumber != user.number && (
+                <div className="flex justify-center h-auto opacity-0 group-hover:opacity-100">
+                  <button
+                    onClick={() => expandlist(item._id)}
+                    className="float-end p-2"
+                  >
+                    {dropdown == item._id ? <FaChevronUp /> : <FaChevronDown />}
+                  </button>
+                  {dropdown == item._id && (
+                    <div
+                      className={`w-auto h-24 flex flex-col bg-white mt-auto m-auto`}
+                    >
+                      <button
+                        className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
+                        onClick={() => deleteitem(item._id)}
+                      >
+                        Delete
+                      </button>
+                      <button
+                        className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
+                        onClick={() => strarmesssage(item._id)}
+                      >
+                        star
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          )}
-
-          {item.audio && <audio controls src={item.audio}></audio>}
-          {item.video && <video controls src={item.video}></video>}
-        </div>
-        <h1 className="text-xs flex justify-end mt-2">
-          {item.star ? <FaRegStar /> : null}
-          <IoCheckmarkDoneOutline />
-          {new Date(item.date).toLocaleDateString()}
-        </h1>
-      </div>
-
-      {/* Place the button here for non-yellow messages */}
-      {item?.sendernumber != user.number && (
-        <div className="flex justify-center">
-             <button onClick={()=>expandlist(item._id)} className="float-end p-2">{dropdown == item._id ? (<FaChevronUp/>):(<FaChevronDown/>)}</button>
-        {dropdown == item._id && (
-      <div className={`w-auto h-24 flex flex-col bg-white mt-auto`}>
-        <button
-          className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
-          onClick={() => deleteitem(item._id)}
-        >
-          Delete
-        </button>
-        <button
-          className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
-          onClick={() => strarmesssage(item._id)}
-        >
-          star
-        </button>
-      </div>
-    )}
-        </div>
-      )}
-      
-    </div>
-
-    
-  </div>
-))}
-
+          </div>
+        ))}
       </div>
     </div>
   );

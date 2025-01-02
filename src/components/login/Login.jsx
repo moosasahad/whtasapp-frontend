@@ -16,12 +16,12 @@ import Otpfeald from "./Otpfeald";
 import Home from "../Home/Home";
 import { Product } from "../Component/Productcontext";
 import { axiosPrivate } from "../../Axiosinstens";
+import { toast } from "react-toastify";
+import { usercontext } from "../Component/Usercontext";
 
-function Login() {
-  // const [state, setState] = useState("page-1");
-  // const [status, setStatus] = useState(false);
-  // const navigate = useNavigate()
-
+function Login() {  
+    const {state} = useContext(usercontext)
+console.log("usercontext",state)
   const countries = [
     { code: "IN", name: "India", dialCode: "+91" },
     { code: "US", name: "United States", dialCode: "+1" },
@@ -45,12 +45,26 @@ function Login() {
       validationSchema: loginvalid,
       onSubmit: async (values) => {
         try {
-          // Post the form values to the server
+          
           const {phonenumber} = values
           const res = await axiosPrivate.post("/",{number:phonenumber});
+          toast.success("Otp send to your number", {
+                              style: {
+                                  width: "250px",
+                                  height: "10px",
+                                 
+                                },
+                            });
           console.log("res post contact", res.data);
           settabs("page-3")
         } catch (error) {
+          toast.warning("invalid cridental", {
+            style: {
+                width: "250px",
+                height: "10px",
+               
+              },
+          });
           console.log("Error in contact post", error);
         }
       },
@@ -91,8 +105,15 @@ const [name, setName] = useState("");
     formData.append("image", profileImage);
 
     try {
-      const response = await axiosPrivate.post("/adduserdetails", formData);
+      const response = await axiosPrivate.patch("/adduserdetails", formData);
       console.log("Profile submitted successfully:", response.data);
+      toast.success("Login succses", {
+        style: {
+            width: "250px",
+            height: "10px",
+           
+          },
+      });
       setlogin(false)
       const storage = localStorage.setItem("user",false)
 
@@ -333,7 +354,7 @@ const [name, setName] = useState("");
                    <div className="flex flex-col items-center text-center">
                      <div className="w-32 h-32 overflow-hidden rounded-full flex justify-center items-center relative">
                        <img
-                         src={profileImage ? URL.createObjectURL(profileImage) : 'default-image-url'}
+                         src={profileImage ? URL.createObjectURL(profileImage) : state?.profileimage}
                          alt="User Profile Image"
                          className="w-full h-full object-cover"
                        />
@@ -354,7 +375,7 @@ const [name, setName] = useState("");
                          type="text"
                          placeholder="Enter your name..."
                          className="border-b-2 border-slate-400 p-2 focus:outline-none focus:border-b-green-500 w-80"
-                         value={name}
+                         value={name?name:state?.name}
                          onChange={(e) => setName(e.target.value)}
                        />
                        <button

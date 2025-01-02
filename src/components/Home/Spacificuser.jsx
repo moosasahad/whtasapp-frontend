@@ -578,86 +578,117 @@ const outsidehandil = () =>{
       {/* ------dispaly user messages ------- */}
 
       <div className="overflow-y-scroll h-5/6 pb-5 messages-container" onClick={outsidehandil}>
-      {messagess?.map((item) => (
-  <div
-    className={`flex ${
-      item?.senderid == user._id ? "justify-end" : "justify-start"
-    } relative`}
-  >
-    <div
-      className={`${
-        item?.senderid == user._id
-          ? "bg-yellow-100"
-          : "bg-white"
-      } min-w-32 max-w-96 p-2 m-2 h-auto rounded-lg`}
-    >
-      <button onClick={()=>expandlist(item._id)} className="float-end p-2">{dropdown == item._id ? (<FaChevronUp/>):(<FaChevronDown/>)}</button>
-      {
-        dropdown == item._id && <div className={`w-auto bg-white absolute z-50 ${item?.senderid == user._id ?"right-2":"left-2"}  top-12 flex flex-col`}>
-        <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start" onClick={()=>deleteitem(item._id)}>Delete</button>
-        {/* <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start">Forwoard</button> */}
-        <button className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start" onClick={()=>strarmesssage(item._id)}>star</button>
-
-
-      </div>
-      }
-      <h1>{item?.text}</h1>
-      
-      <div>
-      {item.image && (
-        <div className="image-container group relative w-full overflow-hidden">
-          <img
-            src={item.image}
-            alt="Example"
-            ref={imageRef}
-            className="w-full h-auto transition-all duration-300 group-hover:blur-sm"
-          />
-          <div className="controls absolute top-0 left-0 w-full h-full  flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+  {messagess?.map((item) => (
+    <div className="relative">
+      <div
+        className={`flex ${
+          item?.senderid == user._id ? "justify-end group" : "justify-start group"
+        }`}
+      >
+        {/* Dropdown for sender's own messages */}
+        {item?.senderid == user._id && (
+          <div className="flex justify-center opacity-0 h-auto group-hover:opacity-100">
+            {dropdown == item._id && (
+              <div className={`h-24 flex flex-col bg-white mt-auto m-auto`}>
+                <button
+                  className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
+                  onClick={() => deleteitem(item._id)}
+                >
+                  Delete
+                </button>
+                <button
+                  className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
+                  onClick={() => strarmesssage(item._id)}
+                >
+                  Star
+                </button>
+              </div>
+            )}
             <button
-              onClick={openFullscreen}
-              className="bg-blue-500 text-white px-4 py-2 rounded m-2"
+              onClick={() => expandlist(item._id)}
+              className="float-end p-2"
             >
-              <MdFullscreen size={24} />
+              {dropdown == item._id ? <FaChevronUp /> : <FaChevronDown />}
             </button>
-            <a href={item.image} download>
-              <button className="bg-green-500 text-white px-4 py-2 rounded m-2">
-                <MdDownload size={24} />
-              </button>
-            </a>
           </div>
+        )}
+
+  
+        <div
+          className={`${
+            item?.senderid == user._id ? "bg-yellow-100" : "bg-white"
+          } min-w-32 w-fit p-2 m-2 h-auto rounded-lg`}
+        >
+          <h1>{item?.text}</h1>
+
+          <div>
+            {item.image && (
+              <div className="image-container group relative max-w-xl overflow-hidden">
+                <img
+                  src={item.image}
+                  alt="Example"
+                  ref={imageRef}
+                  className="w-full h-auto transition-all duration-300 group-hover:blur-sm"
+                />
+                <div className="controls absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <button
+                    onClick={openFullscreen}
+                    className="bg-blue-500 text-white px-4 py-2 rounded m-2"
+                  >
+                    <MdFullscreen size={24} />
+                  </button>
+                  <a href={item.image} download>
+                    <button className="bg-green-500 text-white px-4 py-2 rounded m-2">
+                      <MdDownload size={24} />
+                    </button>
+                  </a>
+                </div>
+              </div>
+            )}
+            {item.audio && <audio controls src={item.audio}></audio>}
+            {item.video && <video controls src={item.video}></video>}
+          </div>
+
+
+          <h1 className="text-xs flex justify-end mt-2">
+            {item.star ? <FaRegStar /> : null}
+            <IoCheckmarkDoneOutline />
+            {new Date(item.date).toLocaleDateString()}
+          </h1>
         </div>
-      )}
 
-        {item.audio && <audio controls src={item.audio}></audio>}
-        {item.video && <video controls src={item.video}></video>}
+
+        {item?.senderid != user._id && (
+          <div className="flex justify-center h-auto opacity-0 group-hover:opacity-100">
+            <button
+              onClick={() => expandlist(item._id)}
+              className="float-end p-2"
+            >
+              {dropdown == item._id ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
+            {dropdown == item._id && (
+              <div className={`w-auto h-24 flex flex-col bg-white mt-auto m-auto`}>
+                <button
+                  className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
+                  onClick={() => deleteitem(item._id)}
+                >
+                  Delete
+                </button>
+                <button
+                  className="p-2 text-lg hover:bg-slate-200 pl-4 pr-4 text-start"
+                  onClick={() => strarmesssage(item._id)}
+                >
+                  Star
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      <h1 className="text-xs flex justify-end mt-2">
-      {item.star ? (<FaRegStar/>):(null)}
-      <IoCheckmarkDoneOutline/>
-        {new Date(item.date).toLocaleDateString()}
-        
-      </h1>
-
     </div>
-    
+  ))}
+</div>
 
-  </div>
-))}
- 
-
-         <div>
-          {/* Input for the message */}
-          {/* <input
-        type="text"
-        placeholder="Type a message..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <button onClick={sendMessage}>Send</button> */}
-
-          {/* List of messages */}
-        </div>
-      </div>
     </div>
   );
 }

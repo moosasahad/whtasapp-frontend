@@ -18,7 +18,7 @@ function App() {
         position="top-center"
         autoClose={500}
         hideProgressBar={true}
-        newestOnTop={false}
+        newestOnTop={true}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss

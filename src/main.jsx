@@ -10,7 +10,7 @@ import Groupcontext from "./components/Component/groupcontext.jsx";
 
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <BrowserRouter>
       <Contact>
         <Productcontext>
@@ -22,5 +22,5 @@ createRoot(document.getElementById("root")).render(
         </Productcontext>
       </Contact>
     </BrowserRouter>
-  </StrictMode>
+  // </StrictMode>
 );

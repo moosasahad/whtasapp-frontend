@@ -7,16 +7,31 @@ import { useEffect } from 'react';
 import profile from '../../../Images/profile image.png'
 import { contactcontext } from '../../Component/Contact';
 import { axiosPrivate } from '../../../Axiosinstens';
+import { toast } from 'react-toastify';
 
 function Chats({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
     const {state,setusesrid,setlogin,login,settabs} = useContext(Product)
     const {state:contacts} = useContext(contactcontext)
     console.log("contacts==============contacts",contacts)
-    const logutfunction = ()=>{
+    const logutfunction =async ()=>{
+     try{
+      const res = await axiosPrivate.post("/logout")
       setlogin(true)
       settabs('page-1')
       localStorage.removeItem("user")
+      console.log("logout res",res.data)
+      toast.warning("logout", {
+        style: {
+            width: "150px",
+            height: "10px",
+           
+          },
+      });
+     }catch(error){
+      console.log("logut error",error)
+     }
+      
     }
     console.log("state",state)
 

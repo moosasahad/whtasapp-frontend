@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Formik, Field, Form } from "formik";
 import axios from 'axios';
 import { axiosPrivate } from "../../Axiosinstens"; 
+import { toast } from "react-toastify";
 
 function OtpField(props) {
   const inputs = useRef([]);
@@ -42,9 +43,23 @@ function OtpField(props) {
         try {
           const res = await axiosPrivate.post("/send-otp", { otp: enteredOTP, userNumber: props.number });
           console.log("OTP submitted successfully:", res.data);
+          toast.success("Otp Verifiyde", {
+                              style: {
+                                  width: "250px",
+                                  height: "10px",
+                                 
+                                },
+                            });
           props.settabs("page-4")
         } catch (error) {
           console.error("Error submitting OTP:", error);
+          toast.error("Invalid Otp", {
+                              style: {
+                                  width: "250px",
+                                  height: "10px",
+                                 
+                                },
+                            });
           
         }
 
@@ -52,7 +67,7 @@ function OtpField(props) {
       }}
     >
       {({ values, setFieldValue, isSubmitting }) => (
-        <Form className="w-full h-full flex justify-center m-10">
+        <Form className="w-full h-full flex items-center gap-3 justify-center m-10">
           <div className="flex flex-wrap gap-4 justify-center items-center">
             {values.otp.map((_, index) => (
               <Field key={index} name={`otp[${index}]`}>
