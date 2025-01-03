@@ -13,7 +13,7 @@ function Channels({setTabs}) {
   return (
     <div>
        <div className='flex justify-between mt-3'>
-       <h1 className='text-2xl font-bold'>Channel</h1>
+       <h1 className='text-2xl font-bold'>Groups</h1>
       <button 
         onClick={()=>setDropdown(!dorpdown)}
         className='w-10 h-10 rounded-full focus:bg-gray-300 flex justify-center items-center text-xl text-gray-500 group'>
@@ -40,11 +40,11 @@ function Channels({setTabs}) {
       <div>
           {
             groups?.map((item)=>(
-              <div className='flex items-center gap-4 border-b-2 cursor-pointer' onClick={()=>setusesrid({id:item._id,page:"group"})}>
+              <div className='flex items-center gap-4 border-b-2 cursor-pointer mt-3 pb-3' onClick={()=>setusesrid({id:item._id,page:"group"})}>
                 <img 
                 src={item.groupImage} 
                 alt="" 
-                className='w-20 h-20'
+                className='w-14 h-14 rounded-full'
                 />
                 <h1 className='text-xl'>{item.groupName}</h1>
               </div>

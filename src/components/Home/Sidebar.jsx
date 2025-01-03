@@ -41,7 +41,7 @@ function Sidebar({setTabs}) {
         >
           <LuMessageCircleMore className="text-2xl text-gray-700" />
           <span className="absolute text-sm font-extralight pt-1 pb-1 bg-slate-800 text-white left-12 rounded-xl pl-4 pr-4 text-center opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out pointer-events-none">
-            Channels
+            Groups
           </span>
         </button>
         <button className="w-10 h-10 flex justify-center items-center rounded-full relative focus:bg-gray-300 group"

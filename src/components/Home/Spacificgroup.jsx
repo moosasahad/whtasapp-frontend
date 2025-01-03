@@ -251,10 +251,10 @@ function Spacificgroup() {
     >
       <div
         className="bg-slate-200 h-16 flex items-center justify-between cursor-pointer"
-        onClick={() => sestdetails(!details)}
+        
       >
         <div className="flex items-center   ml-3">
-          <div className="w-14 h-14 rounded-full overflow-hidden">
+          <div className="w-14 h-14 rounded-full overflow-hidden z-50" onClick={() => sestdetails(!details)}>
             <img
               src={
                 spacificgroup.groupImage
@@ -270,7 +270,7 @@ function Spacificgroup() {
         </div>
 
         <div className="flex gap-8 mr-5 text-gray-500 text-xl">
-          <span title="Vide call">
+          <span title="Vide call" className="z-50">
             <FaVideo />
           </span>
           <span title="Audio call">
@@ -307,25 +307,25 @@ function Spacificgroup() {
               <div className="p-4 bg-white absolute right-2 top-10 shadow-lg w-64 z-40">
                 <h1
                   className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => setTabs("newgroup")}
+                  onClick={() => sestdetails(!details)}
                 >
                   Contact info
                 </h1>
                 <h1
                   className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => setTabs("starede")}
+                  onClick={() =>{ sestdetails(!details),setinfotab("star  ")}}
                 >
-                  Select messages
+                  Stard messages
                 </h1>
-                <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer">
+                {/* <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer">
                   Select chats
-                </h1>
-                <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer">
+                </h1> */}
+                {/* <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer">
                   Close chat
                 </h1>
                 <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer">
                   Disappearing messages
-                </h1>
+                </h1> */}
                 <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer">
                   Clear chat
                 </h1>
@@ -562,7 +562,7 @@ function Spacificgroup() {
                     </div>
                   ) : (
                     <div className="overflow-y-auto h-96">
-                      <div className="flex justify-center items-center border-b border-gray-400 p-2">
+                      <div className="flex  justify-center items-center border-b border-gray-400 p-2">
                         <div className="w-10 h-10 rounded-full overflow-hidden mr-auto ml-5">
                           <img
                             src={spacificgroup?.admin.profileimage}
@@ -577,6 +577,7 @@ function Spacificgroup() {
                                 value.number === spacificgroup?.admin.number
                             ) ? (
                               <>
+                                <h1 className="text-">
                                 {
                                   state.find(
                                     (value) =>
@@ -584,12 +585,13 @@ function Spacificgroup() {
                                       spacificgroup?.admin.number
                                   ).name
                                 }
+                                </h1>
                                 <span className="text-sm font-bold pl-3">
                                   admin
                                 </span>
                               </>
                             ) : (
-                              <h1 className="text-sm text-gray-400">
+                              <h1 className="text-sm text-gray-400 w-24">
                                 {spacificgroup?.admin.name}
                                 <span className="text-sm font-bold pl-3 text-black">
                                   (admin)

@@ -90,8 +90,9 @@ const sendmessageongroup =async ()=>{
         formdata.append("files",postinvalue.files)
     try {
         const res = await axiosPrivate.post("/sendmessageongroup",formdata)
-        console.log("sende message in group",res.data)
         getgrups()
+        console.log("sende message in group",res.data)
+      
     } catch (error) {
         console.log("send message in group error",error)
         
