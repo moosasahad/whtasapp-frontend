@@ -31,14 +31,7 @@ import { PiWarningCircle } from "react-icons/pi";
 import { FaRegStar } from "react-icons/fa";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 
-
-
-
-
-
-
-
-
+const socket = io('http://localhost:4000'); 
 
 
 function Spacificuser({ userid }) {
@@ -58,6 +51,24 @@ function Spacificuser({ userid }) {
     message:"",
     files:"",
   })
+  const [messageio,sestmessageio]=useState([])  
+  useEffect(()=>{
+    sestmessageio(messagess)
+  },[messagess])
+
+  useEffect(() => {
+    socket.on('receive_message', (data) => {
+        sestmessageio((prevMessages) => [...prevMessages, data]);
+        console.log("data",data)
+      });
+  
+      return () => {
+        socket.off('receive_message');
+      };
+    }, []);
+
+    
+
   const {state:contact} = useContext(contactcontext)
   console.log("contact in contact context",contact )
   const findcontact = contact?.find((item)=>item.profileimage._id ==userid.id )
@@ -143,6 +154,7 @@ console.log("usersprofile/......-.././",users)
   //-----------------------message sending =-----------------//
 
   const messagesending =()=>{
+    socket.emit('send_message',postinvalue );
     sendmessage()
     setpostinvalue(
   {    message:"",} 
@@ -150,7 +162,15 @@ console.log("usersprofile/......-.././",users)
     setfile()
     setinputvalue()
   }
+  // useEffect(()=>{
+  //   socket.emit('send_message', { postinvalue });
+  // },[])
+console.log("messageio///...;;'';[messageio",messageio);
 
+     
+   
+   
+  
 
 //----------------------- removeimage --------------------- // 
 const removeimage = ()=>{
@@ -198,6 +218,8 @@ const expandlist = (id)=>{
 
 }
 
+
+
 /////////////////////////////////////////////   AUDIO RECODING /////////////////////////////
 
   const [audioUrl, setAudioUrl] = useState(null);
@@ -242,9 +264,9 @@ const expandlist = (id)=>{
   
   const stopRecording = () => {
     mediaRecorderRef.current?.stop();
-    sendmessage()
+    
     setIsRecording(false);
-    // messagesending()
+   return sendmessage()
   };
 useEffect(()=>{
  
@@ -578,14 +600,14 @@ const outsidehandil = () =>{
       {/* ------dispaly user messages ------- */}
 
       <div className="overflow-y-scroll h-5/6 pb-5 messages-container" onClick={outsidehandil}>
-  {messagess?.map((item) => (
+  {messageio?.map((item) => (
     <div className="relative">
       <div
         className={`flex ${
           item?.senderid == user._id ? "justify-end group" : "justify-start group"
         }`}
       >
-        {/* Dropdown for sender's own messages */}
+
         {item?.senderid == user._id && (
           <div className="flex justify-center opacity-0 h-auto group-hover:opacity-100">
             {dropdown == item._id && (

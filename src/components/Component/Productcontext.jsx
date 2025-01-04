@@ -52,7 +52,7 @@ console.log("fomrdata",formData);
       try {
         const res = await axiosPrivate.post("/sendmessage",formData)
         console.log("post messageee",res.data)
-        getspacificuser()
+        // getspacificuser()
         
         
       } catch (error) {
