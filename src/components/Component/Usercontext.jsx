@@ -12,7 +12,7 @@ function Usercontext({children}) {
             console.log("userprfile",res.data)
             setState(res?.data.data)
         } catch (error) {
-            
+            console.log("userprfile error",error)
         }
        }
       useEffect(()=>{

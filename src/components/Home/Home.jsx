@@ -27,6 +27,9 @@ function Home() {
     setgroupuserid(null);
   }
 
+  console.log();
+  
+
   return (
     <div className="bg-slate-100 flex h-screen">
       {tabs === "channelbaner" && <Channelbaner setTabs={setTabs} />}
@@ -48,7 +51,7 @@ function Home() {
       </div>
       <div className="relative w-full bg-slate-200 ">
         {userid.page == "chat" ? (
-          <Spacificuser userid={userid} />
+          <Spacificuser  />
         ) : userid.page == "group" ? (
           <Spacificgroup setgroupuserid={setgroupuserid} />
         ) : (

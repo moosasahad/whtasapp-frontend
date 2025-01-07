@@ -13,7 +13,6 @@ function Sidebar({setTabs}) {
   const {owner} = useContext(Product)
   const {state} = useContext(usercontext)
   console.log("side bar profile",state);
-  
   return (
     <div className="w-16 h-screen flex flex-col justify-between items-center py-4 bg-slate-100">
       {/* Top Section */}

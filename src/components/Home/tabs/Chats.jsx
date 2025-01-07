@@ -43,13 +43,21 @@ const findemessagers =async ()=>{
     console.log("userfinding res",res.data.dat)
     setfindedser(res.data.data)
   }catch(error){
-    consoel.log("userfindin error",error)
+    console.log("userfindin error",error)
   }
 }
 useEffect(()=>{
   findemessagers()
 
 },[])
+
+console.log();
+
+
+const messagedUser = ({id, number}) => {
+  setusesrid({id,number, page: "chat"})
+ 
+}
 console.log("findeuser/findeuser",findeuser)
   return (
     <div>
@@ -111,7 +119,7 @@ console.log("findeuser/findeuser",findeuser)
       style={{ scrollbarWidth: 'thin',height:'480px' }}
       >
         {findeuser.users?.map((value)=>(
-            <div key={value._id} className='flex items-center my-5 border-b-2 p-2 cursor-pointer' onClick={()=>setusesrid({id:value._id,page:"chat",number:value.number})}>
+            <div key={value._id} className='flex items-center my-5 border-b-2 p-2 cursor-pointer' onClick={()=>messagedUser({id:value._id,number:value.number})}>
                 <div className='w-14 h-14 rounded-full overflow-hidden  mr-3 '>
                     <img
                      src={value.profileimage ? value.profileimage:profile}

@@ -19,7 +19,7 @@ import { GrFormClose } from "react-icons/gr";
 import { Product } from "../Component/Productcontext";
 import { axiosPrivate } from "../../Axiosinstens";
 import { LuSendHorizontal } from "react-icons/lu";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 import { usercontext } from "../Component/Usercontext";
 import { MdFullscreen } from "react-icons/md";
 import { MdDownload } from "react-icons/md";
@@ -31,7 +31,7 @@ import { IoIosContacts } from "react-icons/io";
 import { contactcontext } from "../Component/Contact";
 import { ImUserPlus } from "react-icons/im";
 import { toast } from "react-toastify";
-
+ 
 function Spacificgroup() {
   const [focus, setFocus] = useState(false);
   const [sidebar, setSidebar] = useState(false);
@@ -44,8 +44,9 @@ function Spacificgroup() {
     setpostinvalue,
     getgrups,
     spacificgroup,
+    Getgroupmessage,
   } = useContext(groupcontextsender);
-  const { getspacificuser, groupuserid, userid } = useContext(Product);
+  const { userid } = useContext(Product);
   const [userids, setuserid] = useState(null);
   const [focusing, setFocusing] = useState("");
   const { state: user } = useContext(usercontext);
@@ -75,7 +76,7 @@ function Spacificgroup() {
     if (container) {
       container.scrollTop = container.scrollHeight;
     }
-  }, [groups]);
+  }, [userid,groups,spacificgroup]);
 
   const posttextmessage = (e) => {
     setinputvalue(e.target.value);
@@ -135,8 +136,8 @@ function Spacificgroup() {
       );
       console.log("res delete", res.data);
       getgrups();
+      Getgroupmessage()
       setdropdown(null);
-      getspacificuser();
     } catch (error) {
       console.log("delet error", error);
     }
@@ -149,7 +150,7 @@ function Spacificgroup() {
     }
   };
 
-  /////////////////     string messages ///////////////////////
+  ///////////////// STAR MESSAGE ///////////////////////
   const strarmesssage = async (id) => {
     console.log("dsjkdhshdjskhskjdhskjdhsjhsjkd");
     try {
@@ -158,8 +159,9 @@ function Spacificgroup() {
       );
       console.log("res star", res.data);
       getgrups();
-      setdropdown(null);
-      getspacificuser();
+      setdropdown(null)
+      Getgroupmessage()
+
     } catch (error) {
       console.log("star error", error);
     }
@@ -245,6 +247,18 @@ function Spacificgroup() {
       console.log("admembers error", error);
     }
   };
+///////////////////////////////// EXIT GROUP ///////////////////////
+
+const exitgroup =async ()=>{
+  try {
+    const res =await axiosPrivate.post(`exitgroup/${userid?.id}`)
+    console.log("exiting group res",res)
+  } catch (error) {
+    console.log("exiting group error",error)
+    
+  }
+  console.log("exitgroup",userid?.id)
+}
   return (
     <div
       style={{ backgroundImage: `url(${background})` }}
@@ -258,7 +272,7 @@ function Spacificgroup() {
           <div className="w-14 h-14 rounded-full overflow-hidden z-50" onClick={() => sestdetails(!details)}>
             <img
               src={
-                spacificgroup.groupImage
+                spacificgroup?.groupImage
                   ? spacificgroup?.groupImage
                   : profileimage
               }
@@ -266,7 +280,7 @@ function Spacificgroup() {
             />
           </div>
           <div className="ml-2">
-            <h1>{spacificgroup.groupName}</h1>
+            <h1>{spacificgroup?.groupName}</h1>
           </div>
         </div>
 
@@ -330,8 +344,8 @@ function Spacificgroup() {
                 <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer">
                   Clear chat
                 </h1>
-                <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer">
-                  Delete chat
+                <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer" onClick={exitgroup}>
+                  Exit group
                 </h1>
               </div>
             )}
@@ -379,14 +393,14 @@ function Spacificgroup() {
                 <div className="w-32 h-32 border-2 border-slate-300 rounded-full overflow-hidden">
                   <img
                     src={
-                      spacificgroup.groupImage
+                      spacificgroup?.groupImage
                         ? spacificgroup?.groupImage
                         : profileimage
                     }
                     alt="profile image"
                   />
                 </div>
-                <h1>{spacificgroup.groupName}</h1>
+                <h1>{spacificgroup?.groupName}</h1>
 
                 <div className="flex">
                   <div className="w-24 bg-gray-400 flex flex-col justify-center items-center p-2 rounded-md m-2 gap-2 cursor-pointer">
@@ -422,7 +436,7 @@ function Spacificgroup() {
                       } min-w-32 max-w-96 p-2 m-2 h-auto rounded-lg`}
                     >
                       <button
-                        onClick={() => expandlist(item._id)}
+                        onClick={() => expandlist(item?._id)}
                         className="float-end p-2"
                       >
                         {dropdown == item._id ? (
@@ -458,7 +472,7 @@ function Spacificgroup() {
                         {item.image && (
                           <div className="image-container group relative w-full overflow-hidden">
                             <img
-                              src={item.image}
+                              src={item?.image}
                               alt="Example"
                               ref={imageRef}
                               className="w-full h-auto transition-all duration-300 group-hover:blur-sm"
@@ -770,7 +784,7 @@ function Spacificgroup() {
       {/* ------dispaly user messages ------- */}
 
       <div
-        className="overflow-y-scroll h-5/6 pb-5 messages-container"
+        className="messages-container overflow-y-scroll h-5/6 pb-5"
         onClick={() => sestdetails(false)}
       >
         {spacificgroup?.messages?.map((item) => (

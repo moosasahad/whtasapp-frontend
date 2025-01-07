@@ -48,6 +48,8 @@ console.log("usercontext",state)
           
           const {phonenumber} = values
           const res = await axiosPrivate.post("/",{number:phonenumber});
+          localStorage.setItem("auth-user", JSON.stringify(res?.data.data))
+
           toast.success("Otp send to your number", {
                               style: {
                                   width: "250px",

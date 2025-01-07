@@ -6,8 +6,9 @@ import { Product } from "../../Component/Productcontext";
 import { LuSendHorizontal } from "react-icons/lu";
 import { axiosPrivate } from "../../../Axiosinstens";
 import { contactcontext } from "../../Component/Contact";
-import Statusdisplay, { Userstatus } from "../Statusdisplay";
+import Statusdisplay, { Activuserstatus } from "../Statusdisplay";
 import { toast } from "react-toastify";
+import { usercontext } from "../../Component/Usercontext";
 
 function Status({ setTabs }) {
   const [dorpdown, setDropdown] = useState(false);
@@ -17,13 +18,15 @@ function Status({ setTabs }) {
     type: "",
     content: "",
   });
+  const {state:user} = useContext(usercontext)
+  console.log("useruseruseruseruseruseruseruser",user)
   const [display,setdisplay]=useState()
   const [userdisplay,setuserdisplay] = useState(false)
   const {state} = useContext(contactcontext)
   console.log("setinputdata in stattus page", state);
 
   const fileInputRef = useRef(null);
-  const { owner } = useContext(Product);
+ 
 
   const handleFileUploadClick = () => {
     fileInputRef.current.click();
@@ -47,6 +50,7 @@ function Status({ setTabs }) {
     try {
       const res = await axiosPrivate.post("/createStatus", formdata);
       console.log("statos post res", res.data);
+      getuserstatus()
       toast.success("status posted", {
         style: {
             width: "250px",
@@ -118,23 +122,23 @@ const [currentStatusIndex, setCurrentStatusIndex] = useState(0);
         if (currentStatusIndex < userstatus.length - 1) {
           setCurrentStatusIndex((prev) => prev + 1);
         } else {
-          setIsViewingStatus(false); // Close viewer when done
+          setIsViewingStatus(false); 
         }
-      }, 3000); // Change the time for each status (e.g., 3 seconds)
+      }, 3000); 
 
       return () => clearTimeout(timeout);
     }
   }, [currentStatusIndex, isViewingStatus, userstatus.length]);
 
-  const handleStatusClick = () => {
-    setIsViewingStatus(true);
-    setCurrentStatusIndex(0); // Start from the first status
-  };
+  // const handleStatusClick = () => {
+  //   setIsViewingStatus(true);
+  //   setCurrentStatusIndex(0); // Start from the first status
+  // };
 
-  const closeStatusViewer = () => {
-    setIsViewingStatus(false);
+  // const closeStatusViewer = () => {
+  //   setIsViewingStatus(false);
 
-  };
+  // };
 
   ///////////////////////////////// STATUS TIME SETUP ////////////////////////////
 
@@ -162,9 +166,9 @@ const [currentStatusIndex, setCurrentStatusIndex] = useState(0);
 
  return (
     <div>
-      { userdisplay ? (<Userstatus props={{userstatus,setuserdisplay}}/>):null}
+      { userdisplay ? (<Activuserstatus props={{userstatus,setuserdisplay,getuserstatus}}/>):null}
       
-       { display ? (<Statusdisplay porps={{display,setdisplay,allstatus}} />):null}
+       { display ? (<Statusdisplay props={{display,setdisplay,allstatus}} />):null}
       <div className="flex justify-between pt-5">
         <h1 className="text-2xl font-bold">Status</h1>
         <div className="flex gap-5">
@@ -293,7 +297,7 @@ const [currentStatusIndex, setCurrentStatusIndex] = useState(0);
         <div className="mr-2 cursor-pointer">
           <label className="cursor-pointer">
             <img
-              src={userstatus.find((item)=>item.type == "image")?.content}
+              src={userstatus.find((item)=>item.type == "image")?.content || user?.profileimage }
               alt=""
               className="w-14 h-14 rounded-full"
             />

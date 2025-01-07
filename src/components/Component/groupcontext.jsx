@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { createContext } from 'react'
-import { axiosPrivate } from '../../Axiosinstens'
+import { axiosPrivate, socket } from '../../Axiosinstens'
 import { Product } from './Productcontext'
 import { toast } from 'react-toastify'
 export const groupcontextsender = createContext()
@@ -67,20 +67,56 @@ console.log("formdata,group creating",formdata)
 
 
     const  Getgroupmessage = async ()=>{
-        console.log("1234567890",userid)
         try {
             const res = await axiosPrivate.get(`/getgroupmessage/${userid.id}`)  
             console.log("get message in sapacific group",res.data) 
-            setspacificgroup(res.data)      
+            // setspacificgroup(res?.data.findgroup)      
+
+            socket.on("get-message",(findgroup)=>{
+                console.log("get-message",findgroup)
+            setspacificgroup(findgroup)      
+
+            })
               
         } catch (error) {
             console.log("get message in sapacific group error = ",error)
         }
     }
     useEffect(()=>{
-        Getgroupmessage()
-    },[userid])
 
+        Getgroupmessage()
+
+         if (userid) {
+              
+              const handlePreviousMessages = (findgroup) => {
+                console.log("previousMessage:", findgroup);
+                setspacificgroup(findgroup);
+              };
+        
+              socket.on("get-message", handlePreviousMessages);
+        
+              const handleNewMessage = (data) => {
+                setspacificgroup(data);
+                console.log("newpreviousMessage:", data);
+              };
+        
+              socket.on("res-group-message", handleNewMessage);
+        
+              return () => {
+                socket.off("previousMessage", handlePreviousMessages);
+                // socket.off("newpreviousMessage", handleNewMessage);
+              };
+            }
+    },[userid])
+  
+
+    // useEffect(()=>{
+    //     socket.on("get-grou-message",(data)=>{
+    //         console.log("get-grou-message using soket io",data)
+    //         setspacificgroup(data) 
+    //       })
+       
+    // },[postinvalue])
 //////////////////////  SEND MESSAGE IN GROUP  ///////////////////////////
 
 const sendmessageongroup =async ()=>{
@@ -101,7 +137,9 @@ const sendmessageongroup =async ()=>{
 console.log("spacificgroup///12345678///spacificgroup",spacificgroup)
 
   return (
-    <groupcontextsender.Provider value={{groups,sendmessageongroup,postinvalue,setpostinvalue,getgrups,spacificgroup,creategroup,inputdata,setinputdata}}>
+    <groupcontextsender.Provider value={{
+        groups,sendmessageongroup,postinvalue,setpostinvalue,getgrups,spacificgroup,creategroup,inputdata,setinputdata,Getgroupmessage
+        }}>
         {children}
     </groupcontextsender.Provider>
   )

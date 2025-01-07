@@ -17,7 +17,7 @@ import { BiPoll } from "react-icons/bi";
 import { PiStickerDuotone } from "react-icons/pi";
 import { GrFormClose } from "react-icons/gr";
 import { Product } from "../Component/Productcontext";
-import { axiosPrivate } from "../../Axiosinstens";
+import { axiosPrivate, socket } from "../../Axiosinstens";
 import { LuSendHorizontal } from "react-icons/lu";
 import io from "socket.io-client";
 import { usercontext } from "../Component/Usercontext";
@@ -31,50 +31,106 @@ import { PiWarningCircle } from "react-icons/pi";
 import { FaRegStar } from "react-icons/fa";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 
-const socket = io('http://localhost:4000'); 
 
 
-function Spacificuser({ userid }) {
+function Spacificuser() {
   const [focus, setFocus] = useState(false);
   const [inputvalu,setinputvalue]= useState("")
   const [sidebar, setSidebar] = useState(false);
   const [pop, setpop] = useState(false);
-  const { state, messagess,setinputfild,sendmessage,setfile,file,getspacificuser } = useContext(Product);
+  const { state, messagess,setinputfild,sendmessage,setfile,file,getspacificuser, setmessages, userid } = useContext(Product);
   const [userids, setuserid] = useState(null);
   const [focusing, setFocusing] = useState("");
   const {state:user} = useContext(usercontext)
   const [users,setuser] = useState("")
   const [details,sestdetails] = useState(false)
   const [infotab,setinfotab] = useState("overview")
+  const sender = JSON.parse(localStorage.getItem("auth-user"))
   const [postinvalue,setpostinvalue] = useState({
     receivernumber:users?.number,
     message:"",
     files:"",
   })
-  const [messageio,sestmessageio]=useState([])  
-  useEffect(()=>{
-    sestmessageio(messagess)
-  },[messagess])
 
-  useEffect(() => {
-    socket.on('receive_message', (data) => {
-        sestmessageio((prevMessages) => [...prevMessages, data]);
-        console.log("data",data)
-      });
+
+
+
+
+  // useEffect(()=>{
+  //   // socket.emit('send_message', { postinvalue });
+  //   // console.log("ddddddddddddd");
+    
+  //    if (userid) {
+    
+  //       // console.log("...............................................................");
+  //       // console.log( "....entha makkaleeeee...",userid, user._id);
+        
+  //       socket.emit("joinRooms", userid,user)
+        
+  //       socket.on("previousMessage", (messages)=>{
+  //         // console.log("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+          
+  //         // console.log("previouse",messages);
+         
+  //         setmessages(messages);
+  //       })
+  //       socket.on("newpreviousMessage",(data)=>{
+  //         // console.log("kjsdksjdsk--------0987654321`1234567890-=-0987654321234567890- ----------------------------------")
+  //         // console.log("dhfjkhsjkhs newpreviousMessage",data)
+  //         setmessages((prevMessages) => [
+  //           ...prevMessages,
+  //           data,  
+  //         ]);
+  //       })
+  //     }
+  // },[])
+  // const [messageio,sestmessageio]=useState([])  
+  // useEffect(()=>{
+  //   sestmessageio(messagess)
+  // },[messagess])
+// console.log("jhjfhjhdshfjdhfjkdhfjsdhdskfhsd message display ----------===",messagess);
+
+  // useEffect(() => {
+  //   socket.on('receive_message', (data) => {
+  //       sestmessageio((prevMessages) => [...prevMessages, data]);
+  //       console.log("data",data)
+  //     });
   
-      return () => {
-        socket.off('receive_message');
-      };
-    }, []);
+  //     return () => {
+  //       socket.off('receive_message');
+  //     };
+  //   }, []);
+  // console.log("what is  happend", userid);
 
+
+  // useEffect(() => {
+  
+  //   // Join the receiver's room
+  //   // if (inputfild.receivernumber) {
+  //   //   socket.emit("join_room", inputfild.receivernumber);
+  
+  //   // }
+  
+  //   // // Listen for new messages
+  //   // socket.on("new_message", (data) => {
+  //   //   console.log("New message received:", data);
+  //   //   setmessages(data)
+  //   //   // Handle the received message (e.g., update state or UI)
+  //   // });
+  
+  //   // Clean up the event listener when the component unmounts
+  //   // return () => {
+  //   //   socket.off("new_message"); // Remove specific listener
+  //   // };
+  // }, [userid ]);
     
 
   const {state:contact} = useContext(contactcontext)
-  console.log("contact in contact context",contact )
+  // console.log("contact in contact context",contact )
   const findcontact = contact?.find((item)=>item.profileimage._id ==userid.id )
-  console.log("postinvalue,-=,postinvalue",findcontact)
+  // console.log("postinvalue,-=,postinvalue",findcontact)
   const findmessagesender = state?.find((item)=>item._id == userid.id)
-  console.log("findmessagesender",state)
+  // console.log("findmessagesender",state)
  if(!findcontact){
   useEffect(()=>{
     setuser(findmessagesender)
@@ -86,12 +142,12 @@ function Spacificuser({ userid }) {
 
   },[userid])
  }
-  console.log("userid = ",messagess)
-  console.log("state = ",user)
+  // console.log("userid = ",messagess)
+  // console.log("state = ",user)
 
   const [dropdown,setdropdown]=useState(false)
   setinputfild(postinvalue)
-  console.log("postinvalue /////// postinvalue",postinvalue)
+  // console.log("postinvalue /////// postinvalue",postinvalue)
   useEffect(() => {
     setuserid(userid);
     
@@ -105,8 +161,8 @@ function Spacificuser({ userid }) {
   }, [messagess])
 
   const posttextmessage = (e)=>{
-    console.log("text input ",e.target.value)
-    console.log("dhajghsjag")
+    // console.log("text input ",e.target.value)
+    // console.log("dhajghsjag")
     setinputvalue(e.target.value)
      setpostinvalue((prev) => ({
       ...prev,
@@ -120,11 +176,11 @@ function Spacificuser({ userid }) {
       receivernumber: userid?.id,
       files: e.target.files[0],
     }))
-    console.log(e.target.files[0])
+    // console.log(e.target.files[0])
     setfile(e.target.files[0])
     sendmessage()
   }
-console.log("usersprofile/......-.././",users)
+// console.log("usersprofile/......-.././",users)
 
 
 
@@ -154,7 +210,7 @@ console.log("usersprofile/......-.././",users)
   //-----------------------message sending =-----------------//
 
   const messagesending =()=>{
-    socket.emit('send_message',postinvalue );
+    // socket.emit('send_message',postinvalue );
     sendmessage()
     setpostinvalue(
   {    message:"",} 
@@ -162,11 +218,7 @@ console.log("usersprofile/......-.././",users)
     setfile()
     setinputvalue()
   }
-  // useEffect(()=>{
-  //   socket.emit('send_message', { postinvalue });
-  // },[])
-console.log("messageio///...;;'';[messageio",messageio);
-
+ 
      
    
    
@@ -241,37 +293,49 @@ const expandlist = (id)=>{
         }
       };
   
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
         const audioUrl = URL.createObjectURL(audioBlob);
   
         setAudioUrl(audioUrl);
   
         // Update postinvalue with recorded audio
-        setpostinvalue((prev) => ({
+        await setpostinvalue((prev) => ({
           ...prev,
           receivernumber: userid?.id,
           files: new File([audioBlob], 'audio.wav', { type: 'audio/wav' }),
         }));
+      
+        //  setpostinvalue((prev) => ({
+        //   ...prev,
+        //   receivernumber: userid?.id,
+        //   files: new File([audioBlob], "audio.wav", { type: "audio/wav" }),
+        // }));
+  
+        // Ensure sendmessage() is called after updating postinvalue
+        sendmessage();
+        setAudioUrl(null)
       };
   
       mediaRecorder.start();
       setIsRecording(true);
     } catch (err) {
-      console.error('Error accessing microphone:', err);
+      console.error("Error accessing microphone:", err);
     }
   };
   
   const stopRecording = () => {
-    mediaRecorderRef.current?.stop();
-    
-    setIsRecording(false);
-   return sendmessage()
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
   };
+  
+  
 useEffect(()=>{
  
 },[audioChunks])
-console.log("postinvalue in audio",audioUrl)
+// console.log("postinvalue in audio",audioUrl)
 const outsidehandil = () =>{
   sestdetails(false)
 }
@@ -600,7 +664,7 @@ const outsidehandil = () =>{
       {/* ------dispaly user messages ------- */}
 
       <div className="overflow-y-scroll h-5/6 pb-5 messages-container" onClick={outsidehandil}>
-  {messageio?.map((item) => (
+  {messagess?.map((item) => (
     <div className="relative">
       <div
         className={`flex ${

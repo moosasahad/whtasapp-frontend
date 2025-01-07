@@ -1,11 +1,13 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { Formik, Field, Form } from "formik";
 import axios from 'axios';
 import { axiosPrivate } from "../../Axiosinstens"; 
 import { toast } from "react-toastify";
+import { usercontext } from "../Component/Usercontext";
 
 function OtpField(props) {
   const inputs = useRef([]);
+  const {getprofile} = useContext(usercontext)
 
   const handleFocus = (event, index) => {
     const { value } = event.target;
@@ -51,6 +53,7 @@ function OtpField(props) {
                                 },
                             });
           props.settabs("page-4")
+          getprofile()
         } catch (error) {
           console.error("Error submitting OTP:", error);
           toast.error("Invalid Otp", {

@@ -4,27 +4,38 @@ import { usercontext } from '../Component/Usercontext'
 import { axiosPrivate } from '../../Axiosinstens'
 
 function Statusdisplay(props) {
-  console.log("props instatus",props.porps.allstatus)
-  const displayingstatus = props.porps.allstatus?.filter((item)=>item.userId == props.porps.display )
+  console.log("props instatus",props.props)
+  const displayingstatus = props.props.allstatus?.filter((item)=>item.userId == props.props.display )
   console.log("displayingstatus",displayingstatus)
   const {state} = useContext(contactcontext)
 
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        handleNext();
+      }, 3000);
+  
+      return () => clearTimeout(timer); 
+    }, [currentIndex]);
+
+
+
   if(currentIndex >= displayingstatus.length ){
-    props.porps.setdisplay()
+    props.props.setdisplay()
   }
-  console.log("props.porps.setdisplay()",displayingstatus.length-1)
-  console.log("props.porps.",currentIndex)
+  console.log("props.props.setdisplay()",displayingstatus.length-1)
+  console.log("props.props.",currentIndex)
 
     const handleNext = () => {
-      setCurrentIndex((prev) => (prev + 1));
+      setCurrentIndex(currentIndex+1);
     };
   
     const handlePrev = () => {
       setCurrentIndex((prev) => (prev - 1 + displayingstatus.length) % displayingstatus.length);
     };
+   
   return (
     <div className='w-full h-full bg-slate-300 absolute z-50'>
       
@@ -45,7 +56,7 @@ function Statusdisplay(props) {
             }</h2>
           </div>
             {/* <button
-          onClick={() => props.porps.setdisplay()}
+          onClick={() => props.props.setdisplay()}
           className="absolute top-1 right-4 text-white text-xl bg-gray-800 p-2 rounded-full z-50 w-10 h-10 flex justify-center items-center"
         >
           &times;
@@ -102,48 +113,61 @@ export default Statusdisplay
 ///////////////////////////////  USER STATUS DISPALYING COMPONENT  //////////////////////////////////
 
 
-export const Userstatus = ({ props }) => {
+export const Activuserstatus = ({ props }) => {
   const { state } = useContext(usercontext);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  console.log("props props props props propsprops",props);
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
       handleNext();
-    }, 5000); 
+    }, 3000);
 
     return () => clearTimeout(timer); 
   }, [currentIndex]);
 
   useEffect(() => {
+    
     if (currentIndex >= props.userstatus.length) {
       props.setuserdisplay(false);
     }
   }, [currentIndex, props]);
 
+  if(currentIndex>=props.userstatus.length){
+    props.setuserdisplay(false)
+    setCurrentIndex()
+  }
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % props.userstatus.length);
+    setCurrentIndex(currentIndex+1);
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + props.userstatus.length) % props.userstatus.length);
+    setCurrentIndex((prev) => 
+      prev > 0 ? prev - 1 : props.userstatus.length - 1
+    );
   };
 
   const deletestatus = async (id) => {
     try {
       const res = await axiosPrivate.delete(`/deleteStatus/${id}`);
       console.log("Status deleted:", res.data);
+      props.getuserstatus()
     } catch (error) {
-      console.log("Status delete error:", error);
+      console.log("Error deleting status:", error);
     }
   };
-if(currentIndex >= props?.userstatus.length-1 ){
-    props.setuserdisplay(false)
+
+  if (currentIndex >= props?.userstatus.length) {
+    return null; 
   }
+
+  const currentStatus = props.userstatus[currentIndex];
+
   return (
     <div className="absolute w-full h-full z-50">
       <div className="w-full h-full bg-gray-900 flex items-center justify-center p-4">
-       
+        {/* Header Section */}
         <div className="absolute top-4 flex items-center justify-between w-full px-3">
           <div className="flex items-center gap-3">
             <img
@@ -154,45 +178,44 @@ if(currentIndex >= props?.userstatus.length-1 ){
             <h2 className="text-white">{state.name}</h2>
           </div>
           <button
-            onClick={() => deletestatus(props.userstatus[currentIndex]?._id)}
+            onClick={() => deletestatus(currentStatus?._id)}
             className="text-white text-xl p-2 bg-black rounded-full z-50"
           >
             &times;
           </button>
         </div>
 
-        
         <div className="w-full h-full flex items-center justify-center">
-          {props.userstatus[currentIndex]?.type === "image" && (
+          {currentStatus?.type === "image" && (
             <img
-              src={props.userstatus[currentIndex]?.content}
+              src={currentStatus?.content}
               alt="status"
               className="max-w-full max-h-full object-contain"
             />
           )}
-          {props.userstatus[currentIndex]?.type === "video" && (
+          {currentStatus?.type === "video" && (
             <video
-              src={props.userstatus[currentIndex]?.content}
+              src={currentStatus?.content}
               autoPlay
               loop
               className="max-w-full max-h-full object-contain"
             ></video>
           )}
-          {props.userstatus[currentIndex]?.type === "text" && (
-            <h1 className="text-white text-2xl">{props.userstatus[currentIndex]?.content}</h1>
+          {currentStatus?.type === "text" && (
+            <h1 className="text-white text-2xl">{currentStatus?.content}</h1>
           )}
         </div>
 
-       =
+   
         <button
           onClick={handlePrev}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl p-2 h-full rounded-full"
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl p-2 h-full"
         >
           {/* &larr; */}
         </button>
         <button
           onClick={handleNext}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-2xl p-2 h-full rounded-full"
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-2xl p-2 h-full"
         >
           {/* &rarr; */}
         </button>
