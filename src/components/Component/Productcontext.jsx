@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { createContext } from "react";
 import { axiosPrivate, socket } from "../../Axiosinstens";
+import { usercontext } from "./Usercontext";
+import { data } from "react-router-dom";
 export const Product = createContext();
 
 function Productcontext({ children }) {
@@ -11,6 +13,8 @@ function Productcontext({ children }) {
   const [tabs, settabs] = useState("page-1");
   const [messagess, setmessages] = useState([]);
   const [file, setfile] = useState();
+  const {state:user} = useContext(usercontext) 
+console.log("useruseruseruseruseruseruseruseruseruseruseruseruser--useruseruser====-----user",user);
 
   // // --------- getmessage sender --------------//
 
@@ -114,36 +118,62 @@ function Productcontext({ children }) {
     try {
       const res = await axiosPrivate.get(`/getmessaeg/${userid.id}`);
       console.log("get spacific messager", res?.data.data);
+      // setmessages(res?.data.data)
     } catch (error) {
       console.log("error", error);
     }
   };
-
-  //////////////////////////////// IMPPLINMENT SOCKET IO IN SPACIFIC MESSAGE GETING ////////////////////////////////////
   useEffect(() => {
     getspacificuser();
-    if (userid) {
+  }, [userid]);
 
+  //////////////////////////////// IMPPLINMENT SOCKET IO IN SPACIFIC MESSAGE GETING ////////////////////////////////////
+  // useEffect(() => {
+  //   const userId = user._id; // Replace with the actual user ID
+  //   socket.emit("joinRoom", userId); // Join the room
+  //   console.log("messags spacific:", userId);
+  
+  //   // Listen for previous messages
+  //   socket.on("messags spacific", (messages) => {
+  //     console.log("Previous messags spacific:", messages);
+  //     setmessages(messages)
+  //     // setMessages(messages); // Assuming you have a setMessages function
+  //   });
+  
+  //   return () => {
+  //     socket.off("messags spacific");
+  //   };
+  // }, [userid]);
+  
+  useEffect(() => {
+    if (userid) {
+      const userId = user._id;
+  
+      // Join the specific room for the user
+      socket.emit("joinRoom", userId);
+  
+      // Handle receiving previous messages
       const handlePreviousMessages = (messages) => {
         console.log("previousMessage:", messages);
         setmessages(messages);
       };
-
-      socket.on("previousMessage", handlePreviousMessages);
-
+      socket.on("messags spacific", handlePreviousMessages);
+  
+      // Handle receiving new messages in real-time
       const handleNewMessage = (data) => {
-        setmessages((prev) => [...prev, data]);
         console.log("newpreviousMessage:", data);
+        setmessages((prev) => [...prev, data]);
       };
-
       socket.on("newpreviousMessage", handleNewMessage);
-
+  
+      // Cleanup listeners on unmount or dependency change
       return () => {
         socket.off("previousMessage", handlePreviousMessages);
         socket.off("newpreviousMessage", handleNewMessage);
       };
     }
-  }, [userid]);
+  }, [inputfild,userid]); // Remove `inputfild` to prevent unnecessary re-initializations
+  
 
   const obj = {
     state,

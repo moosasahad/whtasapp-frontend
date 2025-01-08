@@ -222,13 +222,13 @@ const Audio = () => {
   const [message, setMessage] = useState('');
 
   const addEmoji = (emoji) => {
-    setMessage((prev) => prev + emoji.native); // Append selected emoji
+    setMessage((prev) => prev + emoji.native);
   };
 
   return (
     <div>
       <div>
-        <Picker data={data} onEmojiSelect={addEmoji} />
+        {/* <Picker data={data} onEmojiSelect={addEmoji} /> */}
       </div>
       <textarea
         value={message}
