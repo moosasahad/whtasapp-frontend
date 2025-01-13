@@ -20,7 +20,7 @@ function Usercontext({children}) {
       },[])
     console.log("asbdnmbsamdnbamndbasdbsmandbsnmds--------------------11111111111111===========222222222",state)
   return (
-   <usercontext.Provider value={{state,getprofile}}>
+   <usercontext.Provider value={{state,getprofile,setState}}>
       {children}
    </usercontext.Provider>
    

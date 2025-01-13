@@ -13,5 +13,4 @@ export default axios.create({
   });
 
 
- export const socket = io(BASE_URL)
- 
+  export const socket = io(BASE_URL)

@@ -30,6 +30,8 @@ import { CgRecord } from "react-icons/cg";
 import { PiWarningCircle } from "react-icons/pi";
 import { FaRegStar } from "react-icons/fa";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
+import VideoCall from "./VideoCall";
+import { ReactMediaRecorder } from "react-media-recorder";
 
 
 
@@ -51,86 +53,13 @@ function Spacificuser() {
     message:"",
     files:"",
   })
+const [isRecording, setIsRecording] = useState(false);
 
-
-
-
-
-  // useEffect(()=>{
-  //   // socket.emit('send_message', { postinvalue });
-  //   // console.log("ddddddddddddd");
-    
-  //    if (userid) {
-    
-  //       // console.log("...............................................................");
-  //       // console.log( "....entha makkaleeeee...",userid, user._id);
-        
-  //       socket.emit("joinRooms", userid,user)
-        
-  //       socket.on("previousMessage", (messages)=>{
-  //         // console.log("fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-          
-  //         // console.log("previouse",messages);
-         
-  //         setmessages(messages);
-  //       })
-  //       socket.on("newpreviousMessage",(data)=>{
-  //         // console.log("kjsdksjdsk--------0987654321`1234567890-=-0987654321234567890- ----------------------------------")
-  //         // console.log("dhfjkhsjkhs newpreviousMessage",data)
-  //         setmessages((prevMessages) => [
-  //           ...prevMessages,
-  //           data,  
-  //         ]);
-  //       })
-  //     }
-  // },[])
-  // const [messageio,sestmessageio]=useState([])  
-  // useEffect(()=>{
-  //   sestmessageio(messagess)
-  // },[messagess])
-// console.log("jhjfhjhdshfjdhfjkdhfjsdhdskfhsd message display ----------===",messagess);
-
-  // useEffect(() => {
-  //   socket.on('receive_message', (data) => {
-  //       sestmessageio((prevMessages) => [...prevMessages, data]);
-  //       console.log("data",data)
-  //     });
-  
-  //     return () => {
-  //       socket.off('receive_message');
-  //     };
-  //   }, []);
-  // console.log("what is  happend", userid);
-
-
-  // useEffect(() => {
-  
-  //   // Join the receiver's room
-  //   // if (inputfild.receivernumber) {
-  //   //   socket.emit("join_room", inputfild.receivernumber);
-  
-  //   // }
-  
-  //   // // Listen for new messages
-  //   // socket.on("new_message", (data) => {
-  //   //   console.log("New message received:", data);
-  //   //   setmessages(data)
-  //   //   // Handle the received message (e.g., update state or UI)
-  //   // });
-  
-  //   // Clean up the event listener when the component unmounts
-  //   // return () => {
-  //   //   socket.off("new_message"); // Remove specific listener
-  //   // };
-  // }, [userid ]);
-    
+const [videocall,setVideocall]=useState(false)  
 
   const {state:contact} = useContext(contactcontext)
-  // console.log("contact in contact context",contact )
   const findcontact = contact?.find((item)=>item.profileimage._id ==userid.id )
-  // console.log("postinvalue,-=,postinvalue",findcontact)
   const findmessagesender = state?.find((item)=>item._id == userid.id)
-  // console.log("findmessagesender",state)
  if(!findcontact){
   useEffect(()=>{
     setuser(findmessagesender)
@@ -142,17 +71,15 @@ function Spacificuser() {
 
   },[userid])
  }
-  // console.log("userid = ",messagess)
-  // console.log("state = ",user)
 
   const [dropdown,setdropdown]=useState(false)
   setinputfild(postinvalue)
-  // console.log("postinvalue /////// postinvalue",postinvalue)
   useEffect(() => {
     setuserid(userid);
     
   }, [userid]);
 
+  ////////////////// SCROLL TO BOTTOM /////////////////////
   useEffect(() => {
     const container = document.querySelector(".messages-container");
     if (container) {
@@ -161,8 +88,6 @@ function Spacificuser() {
   }, [messagess])
 
   const posttextmessage = (e)=>{
-    // console.log("text input ",e.target.value)
-    // console.log("dhajghsjag")
     setinputvalue(e.target.value)
      setpostinvalue((prev) => ({
       ...prev,
@@ -176,20 +101,11 @@ function Spacificuser() {
       receivernumber: userid?.id,
       files: e.target.files[0],
     }))
-    // console.log(e.target.files[0])
     setfile(e.target.files[0])
     sendmessage()
   }
-// console.log("usersprofile/......-.././",users)
 
-
-
-
-
-
-
-
-/////////////////////////////////////-----------------------
+//////////////////////////////////// FULL SCREEN IMAGE ///////////////////////////
 
 
   const imageRef = useRef(null);
@@ -198,19 +114,16 @@ function Spacificuser() {
     if (imageRef.current.requestFullscreen) {
       imageRef.current.requestFullscreen();
     } else if (imageRef.current.webkitRequestFullscreen) {
-      // For Safari
       imageRef.current.webkitRequestFullscreen();
     } else if (imageRef.current.msRequestFullscreen) {
-      // For IE/Edge
       imageRef.current.msRequestFullscreen();
     }
   };
 
 
-  //-----------------------message sending =-----------------//
+  /////////////////////// MESSAGE SENDING FUNCTIONS //////////////////
 
   const messagesending =()=>{
-    // socket.emit('send_message',postinvalue );
     sendmessage()
     setpostinvalue(
   {    message:"",} 
@@ -218,19 +131,16 @@ function Spacificuser() {
     setfile()
     setinputvalue()
   }
- 
-     
-   
-   
-  
 
-//----------------------- removeimage --------------------- // 
+//////////////////////////// REMOVE IMAGE FROM PRIVEW SCREEN ////////////////////////////////////
 const removeimage = ()=>{
   setfile()
   setpostinvalue()
   
 }
- // ------------------ delete message ---------------------//
+
+/////////////////////// DELETE MESSAGE /////////////////////////
+
 const deleteitem = async (id)=>{
   try {
     const res = await axiosPrivate.delete(`deletemessage/${id}`)
@@ -242,6 +152,7 @@ const deleteitem = async (id)=>{
   }
 }
 ////////////////// STAR MESSAGE ///////////////////////////
+
 const strarmesssage =async (id)=>{
  try {
     const res = await axiosPrivate.patch(`/starmessages/${id}`)
@@ -258,9 +169,6 @@ const strarmesssage =async (id)=>{
 const startdmessage = messagess.filter((item)=>item.star)
 console.log("startdmessage",startdmessage)
 
-
-
-
 const expandlist = (id)=>{
   if(id == dropdown){
     setdropdown(null)
@@ -270,72 +178,7 @@ const expandlist = (id)=>{
 
 }
 
-
-
-/////////////////////////////////////////////   AUDIO RECODING /////////////////////////////
-
-  const [audioUrl, setAudioUrl] = useState(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const mediaRecorderRef = useRef(null);
-  const audioChunks = useRef([]);
-
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-  
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunks.current = [];
-  
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          audioChunks.current.push(e.data);
-        }
-      };
-  
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
-        const audioUrl = URL.createObjectURL(audioBlob);
-  
-        setAudioUrl(audioUrl);
-  
-        // Update postinvalue with recorded audio
-        await setpostinvalue((prev) => ({
-          ...prev,
-          receivernumber: userid?.id,
-          files: new File([audioBlob], 'audio.wav', { type: 'audio/wav' }),
-        }));
-      
-        //  setpostinvalue((prev) => ({
-        //   ...prev,
-        //   receivernumber: userid?.id,
-        //   files: new File([audioBlob], "audio.wav", { type: "audio/wav" }),
-        // }));
-  
-        // Ensure sendmessage() is called after updating postinvalue
-        sendmessage();
-        setAudioUrl(null)
-      };
-  
-      mediaRecorder.start();
-      setIsRecording(true);
-    } catch (err) {
-      console.error("Error accessing microphone:", err);
-    }
-  };
-  
-  const stopRecording = () => {
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
-  };
-  
-  
-useEffect(()=>{
- 
-},[audioChunks])
-// console.log("postinvalue in audio",audioUrl)
+ /////////// HANDILE OUDSIDE CLICK  ///////////////
 const outsidehandil = () =>{
   sestdetails(false)
 }
@@ -345,8 +188,8 @@ const outsidehandil = () =>{
       className="bg-slate-200 h-screen"
       
     >
-      <div className="bg-slate-200 h-16 flex items-center justify-between cursor-pointer" onClick={()=>sestdetails(!details)}>
-        <div className="flex items-center   ml-3">
+      <div className="bg-slate-200 h-16 flex items-center justify-between cursor-pointer" >
+        <div className="flex items-center   ml-3" onClick={()=>sestdetails(!details)}>
           <div className="w-14 h-14 rounded-full overflow-hidden">
           <img
               src={
@@ -358,7 +201,7 @@ const outsidehandil = () =>{
             />
           </div>
           <div className="ml-2">
-            <h1>{contact?.find((item)=>item.profileimage._id == userid.id)?.name || null}</h1>
+            <h1>{contact?.find((item)=>item.profileimage._id == userid.id)?.name || users?.number}</h1>
             <p className="text-gray-500 text-xs">
               {users?.number}
             </p>
@@ -366,7 +209,7 @@ const outsidehandil = () =>{
         </div>
 
         <div className="flex gap-8 mr-5 text-gray-500 text-xl">
-          <span title="Vide call">
+          <span title="Vide call" onClick={()=>setVideocall(true)}>
             <FaVideo />
           </span>
           <span title="Audio call">
@@ -375,7 +218,7 @@ const outsidehandil = () =>{
           <span title="Search" className="" onClick={() => setFocus(true)}>
             <IoSearchSharp className="text-2xl" />
             {focus ? (
-              <div className="flex justify-center items-center p-4 bg-white absolute right-10">
+              <div className="flex justify-center items-center p-4 bg-white absolute right-10 z-50">
                 <input
                   type="text"
                   placeholder="Search"
@@ -575,7 +418,7 @@ const outsidehandil = () =>{
           ) : (
             <GrFormClose className="text-gray-500 text-2xl" />
           )}
-          {pop && (
+          {pop && !file && (
             <div className="p-4 bg-white absolute bottom-10 shadow-lg w-52 rounded-lg z-50">
               <h1
                 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer flex items-center"
@@ -607,7 +450,7 @@ const outsidehandil = () =>{
                 Photos & videos
               </h1>
               <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer flex items-center">
-                <FaCamera className="mr-2 text-red-500 text-2xl" />
+                <FaCamera className="mr-2 text-2xl" />
                 Camera
               </h1>
               <h1 className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer flex items-center">
@@ -650,13 +493,55 @@ const outsidehandil = () =>{
             <button onClick={messagesending} >
               <LuSendHorizontal className="text-2xl text-gray-500 cursor-pointer" />
             </button>
-          ) : (
-            // <button >
-            //   <IoMdMic className="text-2xl text-gray-500 cursor-pointer" />
-            // </button>
-            <button onClick={isRecording ? stopRecording : startRecording}>
+          ) : ( <ReactMediaRecorder
+            audio
+            render={({ startRecording, stopRecording, mediaBlobUrl }) => {
+              const handleRecording = async () => {
+                if (isRecording) {
+                  // Stop recording
+                  stopRecording();
+                  setIsRecording(false);
+          
+                  // Convert mediaBlobUrl to Blob
+                  const response = await fetch(mediaBlobUrl);
+                  const audioBlob = await response.blob();
+          
+                  // Create a File object from the Blob
+                  const audioFile = new File([audioBlob], "audio.wav", { type: "audio/wav" });
+          
+                  // Update postinvalue with audio file and send the message
+                  setpostinvalue((prev) => ({
+                    ...prev,
+                    receivernumber: userid?.id,
+                    files: audioFile,
+                  }));
+                  
+                 sendmessage();
+          
+                  console.log("Audio file sent:", audioFile);
+                } else {
+                  // Start recording
+                  startRecording();
+                  setIsRecording(true);
+                }
+              };
+          
+                    return (
+                      <div>         
+                        <button onClick={handleRecording}>
+                          {isRecording ? (
+                            <CgRecord className="text-2xl text-gray-500 fcursor-pointer" />
+                          ) : (
+                            <IoMdMic className="text-2xl  text-gray-500 fursor-pointer" />
+                          )}
+                        </button>
+                        {/* <button onClick={isRecording ? stopRecording : startRecording}>
         {isRecording ? (<CgRecord className="text-2xl text-gray-500 cursor-pointer"/>) : ( <IoMdMic className="text-2xl text-gray-500 cursor-pointer" />)}
-    </button>
+    </button> */}
+                      </div>
+                    );
+                  }}
+                />
           )}
         </div>
        </div>
@@ -664,6 +549,10 @@ const outsidehandil = () =>{
       {/* ------dispaly user messages ------- */}
 
       <div className="overflow-y-scroll h-5/6 pb-5 messages-container" onClick={outsidehandil}>
+ {videocall?(
+<VideoCall props={{setVideocall,videocall}}/>
+ ):(
+ <>
   {messagess?.map((item) => (
     <div className="relative">
       <div
@@ -738,7 +627,7 @@ const outsidehandil = () =>{
 
           <h1 className="text-xs flex justify-end mt-2">
             {item.star ? <FaRegStar /> : null}
-            <IoCheckmarkDoneOutline />
+            {item?.senderid == user._id ? (<IoCheckmarkDoneOutline className={`${item.status == "seen" ? "text-blue-500":null}`}/>):null}
             {new Date(item.date).toLocaleDateString()}
           </h1>
         </div>
@@ -773,6 +662,9 @@ const outsidehandil = () =>{
       </div>
     </div>
   ))}
+
+ </>
+  )}
 </div>
 
     </div>

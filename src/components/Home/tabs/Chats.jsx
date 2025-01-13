@@ -80,7 +80,7 @@ console.log("findeuser/findeuser",findeuser)
             <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100' onClick={()=>setTabs("starede")}>Starred messages</h1>
             <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100'>Select chats</h1>
             <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100' onClick={logutfunction}>Log out</h1>
-            <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100'>Get Whatsapp for Windows</h1>
+            <h1 className='p-2 text-base text-slate-600 hover:bg-gray-100' onClick={()=>window.location.href = "https://get.microsoft.com/installer/download/9NKSQGP7F2NH?cid=website_cta_psi"} >Get Whatsapp for Windows</h1>
         </span>
           ):(null)}
         </button>

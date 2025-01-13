@@ -1,16 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import profileimage from "../../../Images/profile image.png";
 import { FaPen } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
 import { IoCamera } from "react-icons/io5";
 import { usercontext } from "../../Component/Usercontext";
-import { axiosPrivate } from "../../../Axiosinstens";
+import { axiosPrivate, socket } from "../../../Axiosinstens";
 import { toast } from "react-toastify";
 
 function Profile() {
   const [edit, setEdit] = useState(true);
   const [abouedit, setaboutEdit] = useState(true);
-  const { state,getprofile } = useContext(usercontext);
+  const { state,getprofile,setState } = useContext(usercontext);
   console.log("sdfghjk profile", state);
   const [inputdata, setinputdata] = useState({
     name:state.name,
@@ -26,7 +26,6 @@ function Profile() {
     console.log("hallow ")
     try {
       const res = axiosPrivate.patch("/updateprofile",inputdata);
-      getprofile()
       toast.success("updated", {
               style: {
                   width: "150px",
@@ -35,12 +34,16 @@ function Profile() {
                 },
             });
       console.log("profile update res", res.data);
-    
-      getprofile()
     } catch (error) {
       console.log("profile update error", error);
     }
   };
+  useEffect(()=>{
+    socket.on("updated_profile",(data)=>{
+      console.log("profile updated data",data)
+      setState(data)
+    })
+  },[])
   console.log("updateimage", image);
   if (image) {
     const updateimage = async () => {

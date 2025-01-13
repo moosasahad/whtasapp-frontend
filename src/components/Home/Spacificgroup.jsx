@@ -127,6 +127,7 @@ function Spacificgroup() {
     setfile();
     setpop(false);
     setpostinvalue();
+
   };
   // ------------------ delete message ---------------------//
   const deleteitem = async (id) => {
@@ -200,7 +201,6 @@ function Spacificgroup() {
 
       setAudioUrl(audioUrl);
 
-      // Update postinvalue with recorded audio
       setpostinvalue((prev) => ({
         ...prev,
         groupid: spacificgroup?._id,
@@ -216,8 +216,7 @@ function Spacificgroup() {
     mediaRecorderRef.current?.stop();
 
     setIsRecording(false);
-    
-    return messagesending();
+    messagesending();
   };
   useEffect(() => {}, [audioChunks]);
   console.log("postinvalue in audio", audioUrl);
@@ -225,6 +224,7 @@ function Spacificgroup() {
     sestdetails(false);
   };
 
+  // console.log("contacts == contacts ", state);
   console.log("contacts == contacts ", state);
 
   ///////////////////////////////////////  ADD MEMBERSE IN GROUP //////////////////////////
@@ -692,7 +692,7 @@ const exitgroup =async ()=>{
             ) : (
               <GrFormClose className="text-gray-500 text-2xl" />
             )}
-            {pop && !file && (
+            {pop && file ? (
               <div className="p-4 bg-white absolute bottom-10 shadow-lg w-52 rounded-lg z-50">
                 <h1
                   className="p-2 text-base text-slate-600 hover:bg-gray-100 cursor-pointer flex items-center"
@@ -740,7 +740,7 @@ const exitgroup =async ()=>{
                   New sticker
                 </h1>
               </div>
-            )}
+            ):(null)}
           </span>
 
           {isRecording ? (

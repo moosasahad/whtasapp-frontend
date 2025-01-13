@@ -12,6 +12,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { TbLogout } from "react-icons/tb";
 import { usercontext } from '../../Component/Usercontext';
 import { Product } from '../../Component/Productcontext';
+import { axiosPrivate } from '../../../Axiosinstens';
 
 
 
@@ -21,10 +22,24 @@ function Settings({setTabs}) {
     const {state}= useContext(usercontext)
     const {settabs,setlogin}= useContext(Product)
 
-    const logoutfunction = ()=>{
-      setlogin(true)
-      settabs('page-1')
-      localStorage.removeItem("user")
+    const logoutfunction =async ()=>{
+      
+       try{
+            const res = await axiosPrivate.post("/logout")
+            setlogin(true)
+            settabs('page-1')
+            localStorage.removeItem("user")
+            console.log("logout res",res.data)
+            toast.warning("logout", {
+              style: {
+                  width: "150px",
+                  height: "10px",
+                 
+                },
+            });
+           }catch(error){
+            console.log("logut error",error)
+           }
     }
 
 

@@ -16,6 +16,7 @@ import Spacificuser from "./Spacificuser";
 import { CiLock } from "react-icons/ci";
 import { Product } from "../Component/Productcontext";
 import Spacificgroup from "./Spacificgroup";
+import Metachat from "./Metachat";
 
 function Home() {
   const [tabs, setTabs] = useState("Chat");
@@ -54,7 +55,7 @@ function Home() {
           <Spacificuser  />
         ) : userid.page == "group" ? (
           <Spacificgroup setgroupuserid={setgroupuserid} />
-        ) : (
+        ) :  userid.page === "Meta" ?( <Metachat setTabs={setTabs} />) : (
           <div className="relative bg-slate-200 flex justify-center items-center h-screen w-full">
             <div>
               <div>

@@ -10,7 +10,7 @@ import { Product } from "../Component/Productcontext";
 import { usercontext } from "../Component/Usercontext";
 
 function Sidebar({setTabs}) {
-  const {owner} = useContext(Product)
+  const {setusesrid} = useContext(Product)
   const {state} = useContext(usercontext)
   console.log("side bar profile",state);
   return (
@@ -52,7 +52,7 @@ function Sidebar({setTabs}) {
           </span>
         </button>
         <button className="w-10 h-10 flex justify-center items-center rounded-full relative focus:bg-gray-300 group"
-        onClick={()=>setTabs("Chat")}
+        onClick={()=>setusesrid({page:"Meta"})}
         >
           <img src={metai} alt="meta ai icon" className="w-6 h-6" />
           <span className="absolute text-sm font-extralight pt-1 pb-1 bg-slate-800 text-white left-12 rounded-xl pl-4 pr-4 text-center opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out pointer-events-none">

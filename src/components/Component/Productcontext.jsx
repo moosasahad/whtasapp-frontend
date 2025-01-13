@@ -3,6 +3,7 @@ import { createContext } from "react";
 import { axiosPrivate, socket } from "../../Axiosinstens";
 import { usercontext } from "./Usercontext";
 import { data } from "react-router-dom";
+import { toast } from "react-toastify";
 export const Product = createContext();
 
 function Productcontext({ children }) {
@@ -35,20 +36,22 @@ console.log("useruseruseruseruseruseruseruseruseruseruseruseruser--useruseruser=
   //////////////////////////////////// SEND MESSAGES /////////////////////////////////
 
   const [inputfild, setinputfild] = useState("");
+console.log("setinputfild,setinputfild",inputfild);
 
   const sendmessage = async () => {
     const formData = new FormData();
     formData.append("message", inputfild?.message ? inputfild?.message : "");
     formData.append("files", inputfild?.files);
     formData.append("receivernumber", inputfild?.receivernumber);
-    formData.append("receiverid", inputfild?.receiverid);
+    console.log(
+      "inputfielde formdata",formData);
 
     try {
       const res = await axiosPrivate.post("/sendmessage", formData);
       console.log("post messageee", res.data);
       console.log(
         "inputfielde .................... djksjdkjd .............",
-        inputfild
+        formData
       );
     } catch (error) {
       console.log("post message error", error);
@@ -149,30 +152,71 @@ console.log("useruseruseruseruseruseruseruseruseruseruseruseruser--useruseruser=
     if (userid) {
       const userId = user._id;
   
-      // Join the specific room for the user
+      
       socket.emit("joinRoom", userId);
   
-      // Handle receiving previous messages
+      
       const handlePreviousMessages = (messages) => {
         console.log("previousMessage:", messages);
         setmessages(messages);
       };
       socket.on("messags spacific", handlePreviousMessages);
   
-      // Handle receiving new messages in real-time
+      
       const handleNewMessage = (data) => {
         console.log("newpreviousMessage:", data);
+        
         setmessages((prev) => [...prev, data]);
       };
       socket.on("newpreviousMessage", handleNewMessage);
   
-      // Cleanup listeners on unmount or dependency change
+      
       return () => {
         socket.off("previousMessage", handlePreviousMessages);
         socket.off("newpreviousMessage", handleNewMessage);
       };
     }
-  }, [inputfild,userid]); // Remove `inputfild` to prevent unnecessary re-initializations
+  }, [inputfild,userid]); 
+  
+
+
+//////////// message seen ///////////////////
+
+if(userid.id){
+  const seenmessag = async ()=>{
+    try {
+      const res = await axiosPrivate.post(`/seenmessages/${userid.id}`)
+      console.log("message seen res",res.data)
+    } catch (error) {
+      console.log("message seen error",error)
+      
+    }
+  }
+  seenmessag()
+}
+
+
+
+
+
+
+
+
+
+  //////////////////////////////////////////////////  VIDEO AND AUDIO CALL  ///////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 
   const obj = {
