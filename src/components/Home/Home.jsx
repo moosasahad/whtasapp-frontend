@@ -26,10 +26,7 @@ function Home() {
     setusesrid(null);
   } else if (userid) {
     setgroupuserid(null);
-  }
-
-  console.log();
-  
+  } 
 
   return (
     <div className="bg-slate-100 flex h-screen">

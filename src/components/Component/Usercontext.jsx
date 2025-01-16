@@ -9,7 +9,7 @@ function Usercontext({children}) {
        const getprofile = async ()=>{
         try {
             const res = await axiosPrivate.get("/getspacificuser")
-            console.log("userprfile",res.data)
+            // console.log("userprfile",res.data)
             setState(res?.data.data)
         } catch (error) {
             console.log("userprfile error",error)
@@ -18,7 +18,6 @@ function Usercontext({children}) {
       useEffect(()=>{
         getprofile()
       },[])
-    console.log("asbdnmbsamdnbamndbasdbsmandbsnmds--------------------11111111111111===========222222222",state)
   return (
    <usercontext.Provider value={{state,getprofile,setState}}>
       {children}

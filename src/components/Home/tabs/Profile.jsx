@@ -11,19 +11,16 @@ function Profile() {
   const [edit, setEdit] = useState(true);
   const [abouedit, setaboutEdit] = useState(true);
   const { state,getprofile,setState } = useContext(usercontext);
-  console.log("sdfghjk profile", state);
   const [inputdata, setinputdata] = useState({
     name:state.name,
     about:state.about,
   });
   const [image, setimgae] = useState();
 
-  console.log("updating input value", inputdata);
   const [inpu, setInput] = useState("jhsjd");
 
 
   const updateprofiledata = async () => {
-    console.log("hallow ")
     try {
       const res = axiosPrivate.patch("/updateprofile",inputdata);
       toast.success("updated", {
@@ -33,18 +30,16 @@ function Profile() {
                  
                 },
             });
-      console.log("profile update res", res.data);
+      // console.log("profile update res", res.data);
     } catch (error) {
       console.log("profile update error", error);
     }
   };
   useEffect(()=>{
     socket.on("updated_profile",(data)=>{
-      console.log("profile updated data",data)
       setState(data)
     })
   },[])
-  console.log("updateimage", image);
   if (image) {
     const updateimage = async () => {
       const formdata = new FormData();
@@ -60,7 +55,7 @@ function Profile() {
                   },
               });
              
-        console.log("profile update res", res.data);
+        // console.log("profile update res", res.data);
         setimgae()
       } catch (error) {
         console.log("profile update error", error);
@@ -96,7 +91,6 @@ function Profile() {
               type="file"
               className="hidden"
               onChange={(e) => setimgae(e.target.files[0])}
-              onClick={() => console.log("cliked image")}
             />
           </label>
         </div>

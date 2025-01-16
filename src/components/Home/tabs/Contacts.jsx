@@ -16,9 +16,7 @@ function Contacts({setTabs}) {
   const {setusesrid} = useContext(Product)
   const handilChange = (e)=>{
     setinput(e.target.value)
-    console.log("shdjkahd",input)
   }
-  console.log("asdasd",sercheddata)  
 
 
   return (

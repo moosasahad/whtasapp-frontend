@@ -15,7 +15,6 @@ function Productcontext({ children }) {
   const [messagess, setmessages] = useState([]);
   const [file, setfile] = useState();
   const {state:user} = useContext(usercontext) 
-console.log("useruseruseruseruseruseruseruseruseruseruseruseruser--useruseruser====-----user",user);
 
   // // --------- getmessage sender --------------//
 
@@ -36,23 +35,16 @@ console.log("useruseruseruseruseruseruseruseruseruseruseruseruser--useruseruser=
   //////////////////////////////////// SEND MESSAGES /////////////////////////////////
 
   const [inputfild, setinputfild] = useState("");
-console.log("setinputfild,setinputfild",inputfild);
 
   const sendmessage = async () => {
     const formData = new FormData();
     formData.append("message", inputfild?.message ? inputfild?.message : "");
     formData.append("files", inputfild?.files);
     formData.append("receivernumber", inputfild?.receivernumber);
-    console.log(
-      "inputfielde formdata",formData);
 
     try {
       const res = await axiosPrivate.post("/sendmessage", formData);
-      console.log("post messageee", res.data);
-      console.log(
-        "inputfielde .................... djksjdkjd .............",
-        formData
-      );
+      // console.log("post messageee", res.data);
     } catch (error) {
       console.log("post message error", error);
     }
@@ -120,7 +112,7 @@ console.log("setinputfild,setinputfild",inputfild);
   const getspacificuser = async () => {
     try {
       const res = await axiosPrivate.get(`/getmessaeg/${userid.id}`);
-      console.log("get spacific messager", res?.data.data);
+      // console.log("get spacific messager", res?.data.data);
       // setmessages(res?.data.data)
     } catch (error) {
       console.log("error", error);
@@ -128,7 +120,7 @@ console.log("setinputfild,setinputfild",inputfild);
   };
   useEffect(() => {
     getspacificuser();
-  }, [userid]);
+  }, [userid.page=="chat"]);
 
   //////////////////////////////// IMPPLINMENT SOCKET IO IN SPACIFIC MESSAGE GETING ////////////////////////////////////
   // useEffect(() => {
@@ -157,14 +149,14 @@ console.log("setinputfild,setinputfild",inputfild);
   
       
       const handlePreviousMessages = (messages) => {
-        console.log("previousMessage:", messages);
+        // console.log("previousMessage:", messages);
         setmessages(messages);
       };
       socket.on("messags spacific", handlePreviousMessages);
   
       
       const handleNewMessage = (data) => {
-        console.log("newpreviousMessage:", data);
+        // console.log("newpreviousMessage:", data);
         
         setmessages((prev) => [...prev, data]);
       };
@@ -176,24 +168,27 @@ console.log("setinputfild,setinputfild",inputfild);
         socket.off("newpreviousMessage", handleNewMessage);
       };
     }
-  }, [inputfild,userid]); 
+  }, [inputfild,userid.page == "chat"]); 
   
 
 
 //////////// message seen ///////////////////
 
 if(userid.id){
+  
+}
+useEffect(()=>{
   const seenmessag = async ()=>{
     try {
       const res = await axiosPrivate.post(`/seenmessages/${userid.id}`)
-      console.log("message seen res",res.data)
+      // console.log("message seen res",res.data)
     } catch (error) {
       console.log("message seen error",error)
       
     }
   }
   seenmessag()
-}
+},[userid.id,userid.page == "chat"])
 
 
 

@@ -4,9 +4,7 @@ import { usercontext } from '../Component/Usercontext'
 import { axiosPrivate } from '../../Axiosinstens'
 
 function Statusdisplay(props) {
-  console.log("props instatus",props.props)
   const displayingstatus = props.props.allstatus?.filter((item)=>item.userId == props.props.display )
-  console.log("displayingstatus",displayingstatus)
   const {state} = useContext(contactcontext)
 
 
@@ -25,8 +23,6 @@ function Statusdisplay(props) {
   if(currentIndex >= displayingstatus.length ){
     props.props.setdisplay()
   }
-  console.log("props.props.setdisplay()",displayingstatus.length-1)
-  console.log("props.props.",currentIndex)
 
     const handleNext = () => {
       setCurrentIndex(currentIndex+1);
@@ -116,7 +112,6 @@ export default Statusdisplay
 export const Activuserstatus = ({ props }) => {
   const { state } = useContext(usercontext);
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log("props props props props propsprops",props);
   
 
   useEffect(() => {
@@ -151,7 +146,7 @@ export const Activuserstatus = ({ props }) => {
   const deletestatus = async (id) => {
     try {
       const res = await axiosPrivate.delete(`/deleteStatus/${id}`);
-      console.log("Status deleted:", res.data);
+      // console.log("Status deleted:", res.data);
       props.getuserstatus()
     } catch (error) {
       console.log("Error deleting status:", error);

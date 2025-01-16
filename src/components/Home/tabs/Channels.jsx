@@ -9,7 +9,6 @@ function Channels({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
     const {setgroupuserid,setusesrid} = useContext(Product)
     const {groups} = useContext(groupcontextsender)
-    console.log("groups",groups)
   return (
     <div>
        <div className='flex justify-between mt-3'>

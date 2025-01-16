@@ -12,11 +12,8 @@ function Newgroup({setTabs}) {
   const [clik,setclik] = useState({
     data:[ ],
   })
-  console.log("clik values",clik)
   const collectmembers = (value)=>{
-    console.log("click",clik)
     const findexisting= inputdata?.members?.find((item)=>item._id == value._id)
-    console.log("findexisting",findexisting)
     if(!findexisting){
       setinputdata((priv) => ({
         ...priv,
@@ -26,7 +23,6 @@ function Newgroup({setTabs}) {
   }
 
   const removeiteminstate = (id)=>{
-console.log(id)
 const filterd = inputdata?.members?.filter((item)=>item._id !== id)
 setinputdata({members:filterd})
  

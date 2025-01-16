@@ -21,7 +21,7 @@ function NewContacts({setTabs}) {
         const {name,phonenumber} = value;
         try {
                   const res = await axiosPrivate.post("/savecontact",{name,number:phonenumber});
-                  console.log("res post contact", res.data.response);
+                  // console.log("res post contact", res.data.response);
                   toast.success("Contact saved", {
                     style: {
                         width: "250px",

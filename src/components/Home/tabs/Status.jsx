@@ -19,11 +19,9 @@ function Status({ setTabs }) {
     content: "",
   });
   const {state:user} = useContext(usercontext)
-  console.log("useruseruseruseruseruseruseruser",user)
   const [display,setdisplay]=useState()
   const [userdisplay,setuserdisplay] = useState(false)
   const {state} = useContext(contactcontext)
-  console.log("setinputdata in stattus page", state);
 
   const fileInputRef = useRef(null);
  
@@ -38,7 +36,6 @@ function Status({ setTabs }) {
   //////////////////////////////// POST STATUS ////////////////////////////////
 
   const poststatus = async () => {
-    console.log("formdata ", inputdata.type);
     const formdata = new FormData();
     formdata.append("type", inputdata.type);
     formdata.append("files", inputdata.content);
@@ -49,7 +46,7 @@ function Status({ setTabs }) {
 
     try {
       const res = await axiosPrivate.post("/createStatus", formdata);
-      console.log("statos post res", res.data);
+      // console.log("statos post res", res.data);
       getuserstatus()
       toast.success("status posted", {
         style: {
@@ -74,7 +71,7 @@ function Status({ setTabs }) {
   const getuserstatus = async () => {
     try {
       const res = await axiosPrivate.get("/getUserStatuses");
-      console.log("user satatus get", res.data);
+      // console.log("user satatus get", res.data);
       setuserStatus(res.data.data)
 
     } catch (error) {
@@ -91,12 +88,12 @@ const [allstatus,setallstatus] = useState([])
 const getsavedcontactstatus = async () =>{
   try {
     const res =await axiosPrivate.get("/getContactStatuses")
-    console.log("svedcontact status res",res?.data.data)
+    // console.log("svedcontact status res",res?.data.data)
     setallstatus(res?.data.data)
     const uniqueStatuses = Array.from(
       new Map(res?.data.data.map(item => [item.userId, item])).values()
     );
-    console.log("user status in status page =2",uniqueStatuses)
+    // console.log("user status in status page =2",uniqueStatuses)
     setstatuss(uniqueStatuses)
   } catch (error) {
     console.log("avedcontact status error",error)    
@@ -190,7 +187,6 @@ const [currentStatusIndex, setCurrentStatusIndex] = useState(0);
                     className="hidden"
                     onChange={(e) =>{
                       const file = e.target.files[0];
-                        console.log("file type ==",file.type.split("/")[0])
                      if(file.type.split("/")[0] == "image"){
                       setinputdata({
                         type: "image",
@@ -219,7 +215,6 @@ const [currentStatusIndex, setCurrentStatusIndex] = useState(0);
                     className="hidden"
                     onChange={(e) =>{
                       const file = e.target.files[0];
-                        console.log("file type ==",file.type.split("/")[0])
                      if(file.type.split("/")[0] == "video"){
                       setinputdata({
                         type: "video",

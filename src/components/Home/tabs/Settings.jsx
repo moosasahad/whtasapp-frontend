@@ -29,7 +29,7 @@ function Settings({setTabs}) {
             setlogin(true)
             settabs('page-1')
             localStorage.removeItem("user")
-            console.log("logout res",res.data)
+            // console.log("logout res",res.data)
             toast.warning("logout", {
               style: {
                   width: "150px",

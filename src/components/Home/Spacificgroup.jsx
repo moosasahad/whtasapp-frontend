@@ -46,6 +46,8 @@ function Spacificgroup() {
     spacificgroup,
     Getgroupmessage,
   } = useContext(groupcontextsender);
+    
+  console.log(" spacificgroup",spacificgroup)
   const { userid } = useContext(Product);
   const [userids, setuserid] = useState(null);
   const [focusing, setFocusing] = useState("");
@@ -60,13 +62,11 @@ function Spacificgroup() {
   //////////////// FINDING SPACIFIC GROUP //////////////////////
   //   const [spacificgroup,setspacificgroup]= useState([])
   //   const spacificgroup = groups?.find((item) => item._id == userid.id);
-  console.log("spacificgroup -- spacificgroup", spacificgroup);
   // useEffect(()=>{
   //   setspacificgroup(spacificgroup)
 
   // },[dropdown])
 
-  console.log("sending group data", postinvalue);
   useEffect(() => {
     setuserid(userid);
   }, [userid]);
@@ -92,7 +92,6 @@ function Spacificgroup() {
       groupid: spacificgroup?._id,
       files: e.target.files[0],
     }));
-    console.log(e.target.files[0]);
     sendmessage();
   };
 
@@ -135,7 +134,7 @@ function Spacificgroup() {
       const res = await axiosPrivate.delete(
         `deletemessagegroupmessage/${spacificgroup?._id}/${id}`
       );
-      console.log("res delete", res.data);
+      // console.log("res delete", res.data);
       getgrups();
       Getgroupmessage()
       setdropdown(null);
@@ -153,12 +152,11 @@ function Spacificgroup() {
 
   ///////////////// STAR MESSAGE ///////////////////////
   const strarmesssage = async (id) => {
-    console.log("dsjkdhshdjskhskjdhskjdhsjhsjkd");
     try {
       const res = await axiosPrivate.patch(
         `stargroupemessage/${spacificgroup?._id}/${id}`
       );
-      console.log("res star", res.data);
+      // console.log("res star", res.data);
       getgrups();
       setdropdown(null)
       Getgroupmessage()
@@ -171,7 +169,6 @@ function Spacificgroup() {
   ////////////////// FNDING ////////////
 
   const startdmessage = spacificgroup?.messages?.filter((item) => item.star);
-  console.log("startdmessage", startdmessage);
 
   ///////////////////////    GROUPE MEMBERS  /////////////////////////////
 
@@ -219,24 +216,20 @@ function Spacificgroup() {
     messagesending();
   };
   useEffect(() => {}, [audioChunks]);
-  console.log("postinvalue in audio", audioUrl);
   const outsidehandil = () => {
     sestdetails(false);
   };
 
-  // console.log("contacts == contacts ", state);
-  console.log("contacts == contacts ", state);
 
   ///////////////////////////////////////  ADD MEMBERSE IN GROUP //////////////////////////
 
   const admebersingroup = async (id) => {
-    console.log("groupuser id", id);
 
     try {
       const res = await axiosPrivate.patch(
         `addmembersingroup/${id}/${spacificgroup?._id}`
       );
-      console.log("res.admebersingroup", res.data);
+      // console.log("res.admebersingroup", res.data);
       toast.success("added", {
         style: {
           width: "150px",
@@ -252,12 +245,11 @@ function Spacificgroup() {
 const exitgroup =async ()=>{
   try {
     const res =await axiosPrivate.post(`exitgroup/${userid?.id}`)
-    console.log("exiting group res",res)
+    // console.log("exiting group res",res)
   } catch (error) {
     console.log("exiting group error",error)
     
   }
-  console.log("exitgroup",userid?.id)
 }
   return (
     <div
@@ -838,7 +830,7 @@ const exitgroup =async ()=>{
                   ) : (
                     <div className="flex gap-2 items-center">
                       <img
-                        src={item?.sender?.profileimage}
+                        src={item? (item.sender?.profileimage):(profileimage)}
                         alt=""
                         className="w-8 h-8 rounded-full"
                       />

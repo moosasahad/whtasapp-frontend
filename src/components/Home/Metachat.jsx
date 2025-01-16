@@ -9,7 +9,7 @@ import background from "../../Images/backgroun.png";
 
 const API_KEY = import.meta.env.VITE_API_KEY_API_KEY;
 // System message defines ChatGPT's behavior and tone
-// console.log("Environment Variables:", process.env);
+
 
 const systemMessage = {
   role: "system",
@@ -27,7 +27,6 @@ function Metachat() {
   const [isTyping, setIsTyping] = useState(false);
 
   const handleSend = async (message) => {
-    console.log("message",message)
     const newMessage = {
       message,
       direction: 'outgoing',

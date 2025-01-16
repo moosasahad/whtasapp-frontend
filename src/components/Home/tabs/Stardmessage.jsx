@@ -13,8 +13,7 @@ function Stardmessage({setTabs}) {
   const staredmessage = async ()=>{
     try{
       const res = await axiosPrivate.get("/allstardemessage")
-    console.log("staredmessage res ", res.data.findemessages
-    )
+   // console.log("staredmessage res ", res.data.findemessages)
     setMessage(res.data.findemessages
     )
     }catch(error){

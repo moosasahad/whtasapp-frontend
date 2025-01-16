@@ -11,7 +11,6 @@ const VideoCall = ({ props }) => {
   const myVideoRef = useRef(null);
   const peerVideoRef = useRef(null);
   const {userid} = useContext(Product)
-console.log("props == props video call",props);
 
   useEffect(() => {
     // Get user's media (audio/video)

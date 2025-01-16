@@ -144,7 +144,7 @@ const removeimage = ()=>{
 const deleteitem = async (id)=>{
   try {
     const res = await axiosPrivate.delete(`deletemessage/${id}`)
-    console.log("res delete", res.data)
+    // console.log("res delete", res.data)
     setdropdown(null)
     getspacificuser()
   } catch (error) {
@@ -156,7 +156,7 @@ const deleteitem = async (id)=>{
 const strarmesssage =async (id)=>{
  try {
     const res = await axiosPrivate.patch(`/starmessages/${id}`)
-    console.log("res star message", res.data)
+    // console.log("res star message", res.data)
     setdropdown(null)
     getspacificuser()
   } catch (error) {
@@ -167,7 +167,6 @@ const strarmesssage =async (id)=>{
 //////////////////////  FINDE STARD MESSAGE ////////////////////
 
 const startdmessage = messagess.filter((item)=>item.star)
-console.log("startdmessage",startdmessage)
 
 const expandlist = (id)=>{
   if(id == dropdown){
@@ -518,7 +517,6 @@ const outsidehandil = () =>{
                   
                  sendmessage();
           
-                  console.log("Audio file sent:", audioFile);
                 } else {
                   // Start recording
                   startRecording();

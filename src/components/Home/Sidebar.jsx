@@ -12,7 +12,6 @@ import { usercontext } from "../Component/Usercontext";
 function Sidebar({setTabs}) {
   const {setusesrid} = useContext(Product)
   const {state} = useContext(usercontext)
-  console.log("side bar profile",state);
   return (
     <div className="w-16 h-screen flex flex-col justify-between items-center py-4 bg-slate-100">
       {/* Top Section */}

@@ -21,7 +21,6 @@ import { usercontext } from "../Component/Usercontext";
 
 function Login() {  
     const {state} = useContext(usercontext)
-console.log("usercontext",state)
   const countries = [
     { code: "IN", name: "India", dialCode: "+91" },
     { code: "US", name: "United States", dialCode: "+1" },
@@ -57,7 +56,7 @@ console.log("usercontext",state)
                                  
                                 },
                             });
-          console.log("res post contact", res.data);
+          // console.log("res post contact", res.data);
           settabs("page-3")
         } catch (error) {
           toast.warning("invalid cridental", {
@@ -85,9 +84,7 @@ useEffect(()=>{
   
 },[login])
 const item = localStorage.getItem("user")
-  console.log("lockel item ",item)
    setlogin(item)
-// console.log("login state",login);
 
 ////// ----------------------------------  update user profile and upload image ---------------------------------- ////////
 
@@ -108,7 +105,7 @@ const [name, setName] = useState("");
 
     try {
       const response = await axiosPrivate.patch("/adduserdetails", formData);
-      console.log("Profile submitted successfully:", response.data);
+      // console.log("Profile submitted successfully:", response.data);
       toast.success("Login succses", {
         style: {
             width: "250px",

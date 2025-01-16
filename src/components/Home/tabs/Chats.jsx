@@ -13,14 +13,13 @@ function Chats({setTabs}) {
     const [dorpdown,setDropdown]=useState(false)
     const {state,setusesrid,setlogin,login,settabs} = useContext(Product)
     const {state:contacts} = useContext(contactcontext)
-    console.log("contacts==============contacts",contacts)
     const logutfunction =async ()=>{
      try{
       const res = await axiosPrivate.post("/logout")
       setlogin(true)
       settabs('page-1')
       localStorage.removeItem("user")
-      console.log("logout res",res.data)
+      // console.log("logout res",res.data)
       toast.warning("logout", {
         style: {
             width: "150px",
@@ -33,14 +32,13 @@ function Chats({setTabs}) {
      }
       
     }
-    console.log("state",state)
 
 //////////////////////////////////////////////////////////
 const [findeuser,setfindedser]=useState([])
 const findemessagers =async ()=>{
   try{
     const res = await axiosPrivate.get("/getChatData")
-    console.log("userfinding res",res.data.dat)
+    // console.log("userfinding res",res.data.dat)
     setfindedser(res.data.data)
   }catch(error){
     console.log("userfindin error",error)
@@ -51,14 +49,12 @@ useEffect(()=>{
 
 },[])
 
-console.log();
 
 
 const messagedUser = ({id, number}) => {
   setusesrid({id,number, page: "chat"})
  
 }
-console.log("findeuser/findeuser",findeuser)
   return (
     <div>
       <div className='flex justify-between mt-3 '>

@@ -18,7 +18,8 @@ function Groupcontext({children}) {
         files:"",
       })
 const {userid} = useContext(Product)
-console.log("group creating data",inputdata)
+
+
 //////////////////////////////////// GREATE GROUP /////////////////////////////
 
 const creategroup = async ()=>{
@@ -31,10 +32,9 @@ const creategroup = async ()=>{
           number: item.number,
         }))
       ))
-console.log("formdata,group creating",formdata)
     try{
         const res = await axiosPrivate.post("creategroup",formdata)
-        console.log("create group res",res.data)
+        // console.log("create group res",res.data)
          toast.success("Group created", {
                     style: {
                         width: "150px",
@@ -52,7 +52,7 @@ console.log("formdata,group creating",formdata)
         
         try {
             const res = await axiosPrivate.get("/usergroups")  
-            console.log("get group",res.data) 
+            // console.log("get group",res.data) 
             setgroups(res.data?.data)      
               
         } catch (error) {
@@ -69,11 +69,11 @@ console.log("formdata,group creating",formdata)
     const  Getgroupmessage = async ()=>{
         try {
             const res = await axiosPrivate.get(`/getgroupmessage/${userid.id}`)  
-            console.log("get message in sapacific group",res.data) 
+            // console.log("get message in sapacific group",res.data) 
             // setspacificgroup(res?.data.findgroup)      
 
             socket.on("get-message",(findgroup)=>{
-                console.log("get-message",findgroup)
+                // console.log("get-message",findgroup)
             setspacificgroup(findgroup)      
 
             })
@@ -89,7 +89,7 @@ console.log("formdata,group creating",formdata)
          if (userid) {
               
               const handlePreviousMessages = (findgroup) => {
-                console.log("previousMessage:", findgroup);
+                // console.log("previousMessage:", findgroup);
                 setspacificgroup(findgroup);
               };
         
@@ -97,7 +97,7 @@ console.log("formdata,group creating",formdata)
         
               const handleNewMessage = (data) => {
                 setspacificgroup(data);
-                console.log("newpreviousMessage:", data);
+                // console.log("newpreviousMessage:", data);
               };
         
               socket.on("res-group-message", handleNewMessage);
@@ -107,7 +107,7 @@ console.log("formdata,group creating",formdata)
                 // socket.off("newpreviousMessage", handleNewMessage);
               };
             }
-    },[userid])
+    },[userid.page == "group",userid.id])
   
 
     // useEffect(()=>{
@@ -127,14 +127,13 @@ const sendmessageongroup =async ()=>{
     try {
         const res = await axiosPrivate.post("/sendmessageongroup",formdata)
         getgrups()
-        console.log("sende message in group",res.data)
+        // console.log("sende message in group",res.data)
       
     } catch (error) {
-        console.log("send message in group error",error)
+        // console.log("send message in group error",error)
         
     }
 }
-console.log("spacificgroup///12345678///spacificgroup",spacificgroup)
 
   return (
     <groupcontextsender.Provider value={{
