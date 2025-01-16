@@ -123,23 +123,7 @@ function Productcontext({ children }) {
   }, [userid.page=="chat"]);
 
   //////////////////////////////// IMPPLINMENT SOCKET IO IN SPACIFIC MESSAGE GETING ////////////////////////////////////
-  // useEffect(() => {
-  //   const userId = user._id; // Replace with the actual user ID
-  //   socket.emit("joinRoom", userId); // Join the room
-  //   console.log("messags spacific:", userId);
-  
-  //   // Listen for previous messages
-  //   socket.on("messags spacific", (messages) => {
-  //     console.log("Previous messags spacific:", messages);
-  //     setmessages(messages)
-  //     // setMessages(messages); // Assuming you have a setMessages function
-  //   });
-  
-  //   return () => {
-  //     socket.off("messags spacific");
-  //   };
-  // }, [userid]);
-  
+    
   useEffect(() => {
     if (userid) {
       const userId = user._id;

@@ -3,6 +3,7 @@ import { createContext } from 'react'
 import { axiosPrivate, socket } from '../../Axiosinstens'
 import { Product } from './Productcontext'
 import { toast } from 'react-toastify'
+import { usercontext } from './Usercontext'
 export const groupcontextsender = createContext()
 function Groupcontext({children}) {
     const [groups,setgroups]= useState([])
@@ -18,6 +19,8 @@ function Groupcontext({children}) {
         files:"",
       })
 const {userid} = useContext(Product)
+const {state} = useContext(usercontext)
+
 
 
 //////////////////////////////////// GREATE GROUP /////////////////////////////
@@ -87,7 +90,8 @@ const creategroup = async ()=>{
         Getgroupmessage()
 
          if (userid) {
-              
+            const usesrId = state?._id
+              socket.emit("joingrouproom", usesrId);
               const handlePreviousMessages = (findgroup) => {
                 // console.log("previousMessage:", findgroup);
                 setspacificgroup(findgroup);
@@ -97,7 +101,7 @@ const creategroup = async ()=>{
         
               const handleNewMessage = (data) => {
                 setspacificgroup(data);
-                // console.log("newpreviousMessage:", data);
+                console.log("newpreviousMessage:", data);
               };
         
               socket.on("res-group-message", handleNewMessage);
@@ -134,6 +138,36 @@ const sendmessageongroup =async ()=>{
         
     }
 }
+
+// useEffect(() => {
+//     if (userid) {
+//       const userId = user._id;
+  
+      
+//       socket.emit("joingrouproom", userId);
+  
+      
+//       const handlePreviousMessages = (messages) => {
+//         // console.log("previousMessage:", messages);
+//         setmessages(messages);
+//       };
+//       socket.on("messags spacific", handlePreviousMessages);
+  
+      
+//       const handleNewMessage = (data) => {
+//         // console.log("newpreviousMessage:", data);
+        
+//         setmessages((prev) => [...prev, data]);
+//       };
+//       socket.on("newpreviousMessage", handleNewMessage);
+  
+      
+//       return () => {
+//         socket.off("previousMessage", handlePreviousMessages);
+//         socket.off("newpreviousMessage", handleNewMessage);
+//       };
+//     }
+//   }, [inputfild,userid.page == "chat"]); 
 
   return (
     <groupcontextsender.Provider value={{
